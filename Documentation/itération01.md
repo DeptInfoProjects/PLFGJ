@@ -1,4 +1,3 @@
-﻿
 # Bilan itération 1
 
 ### Bilan de l'itération des fonctionnalités implémentée :

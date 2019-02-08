@@ -23,7 +23,7 @@ Date prevu :    08 / 02 / 2019
 Date prevu :    15 / 02 / 2019
 
 * Implémentation de la page home de l'application
-* Création d'un menu pour les differents exercies et jeux qui seront proposés
+* Création d'un menu pour les differents exercices et jeux qui seront proposés
 * Test sur les tâches réalisées
 
 ### Livraison 3 :

@@ -1,7 +1,13 @@
 package serveur;
 
-import java.net.ServerSocket;
-import java.net.Socket;
+
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+
+
+import java.net.*;
+import java.rmi.server.ExportException;
 
 public class Serveur {
     public static void main(String arg[]){

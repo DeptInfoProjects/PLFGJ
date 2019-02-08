@@ -1,20 +1,7 @@
 package serveur;
 
-import com.corundumstudio.socketio.AckRequest;
-import com.corundumstudio.socketio.Configuration;
-import com.corundumstudio.socketio.SocketIOClient;
-import com.corundumstudio.socketio.SocketIOServer;
-import com.corundumstudio.socketio.listener.ConnectListener;
-import com.corundumstudio.socketio.listener.DataListener;
-
-
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
-
-import java.net.*;
-import java.rmi.server.ExportException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Serveur {
     public static void main(String arg[]){

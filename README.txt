@@ -22,14 +22,13 @@ Date prevu :    08 / 02 / 2019
 ### Livraison 2 :
 Date prevu :    15 / 02 / 2019
 
-* Implémentation de la page home de l'application
-* Création d'un menu pour les differents exercices et jeux qui seront proposés
-* Test sur les tâches réalisées
-
+* Implemenation du Canvas pour dessiner
+* Le Client envoye un messege au Serveur de qu'il a finit 
+* Le Serveur il recoit le messege et renvoye 0
 ### Livraison 3 :
 Date prevu :    28 / 02 / 2019
 
-* Implémentation des differentes formes géometriques (point / segment / triangle / carré / rond)
+* 
 * Test sur les tâches réalisées
 
 ### Livraison 4 :

@@ -44,7 +44,7 @@ public class Controleur {
     }
 
     public void jeRejoue() {
-        int val = 456 ;
+        int val = 0 ;
         if (val >= 0) {
             dernierCoup = val;
             connexion.envoyerCoup(val);

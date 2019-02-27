@@ -71,7 +71,7 @@ public class Serveur {
                 } else
                 {
                     coups.add(coup);
-                    System.out.println("le client doit encore cherché ");
+                    System.out.println("On a bien recu l'image ");
                     poserUneQuestion(socketIOClient, coup.isPlusGrand());
                 }
 
@@ -120,8 +120,8 @@ public class Serveur {
             e.printStackTrace();
         }
         Configuration config = new Configuration();
-        config.setHostname("10.1.97.74");
-        //config.setHostname("172.20.10.2");
+        //config.setHostname("10.1.119.84");
+        config.setHostname("10.1.124.22");
         config.setPort(10101);
 
 

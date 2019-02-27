@@ -46,7 +46,7 @@ public class Connexion  {
                     System.out.println(" !! on est déconnecté !! ");
                     connexion.disconnect();
                     connexion.close();
-                    controleur.finPartie();
+                    //controleur.finPartie();
 
                 }
             });
@@ -75,10 +75,10 @@ public class Connexion  {
                             }
                         }
 
-                        controleur.rejouer(plusGrand, coups);
 
 
-                    } else controleur.premierCoup();
+
+                    }
                 }
             });
 
@@ -108,6 +108,10 @@ public class Connexion  {
         }
         connexion.emit("identification", pieceJointe);
     }
+
+  //  public void envoyerString() {
+  //      connexion.emit("Bien recu");
+  //  }
 
     public void envoyerCoup(int val) {
         connexion.emit("réponse",val);

@@ -35,32 +35,8 @@ public class Controleur {
 
     public void aprèsConnexion() {
         connexion.envoyerId(moi);
-
     }
 
-    public void finPartie() {
-        vue.afficheMessage("bravo !!");
 
-    }
 
-    public void jeRejoue() {
-        int val = 0 ;
-        if (val >= 0) {
-            dernierCoup = val;
-            connexion.envoyerCoup(val);
-        }
-        else {
-            vue.afficheMessage("Retentez ..");
-        }
-
-    }
-
-    public void rejouer(boolean plusGrand, ArrayList<Coup> coups) {
-        vue.afficheMessage(plusGrand?"c'est plus petit que "+dernierCoup:"c'est plus grand que "+dernierCoup);
-
-    }
-
-    public void premierCoup() {
-        vue.afficheMessage("Dessiner une forme");
-    }
 }

@@ -12,10 +12,11 @@ import android.graphics.Path;
 
 
 
+
 public class MyCanvas extends View
 {
-    Paint paint;
-    Path path;
+    public Paint paint;
+    public Path path;
     public MyCanvas(Context context, AttributeSet attrs ){
         super(context,attrs);
         paint = new Paint();
@@ -54,5 +55,12 @@ public class MyCanvas extends View
         }
         invalidate();
         return true;
+    }
+
+    public void effacerCanvas(){
+        this.path.reset();
+    }
+    public void setColor(){
+        this.paint.setColor(Color.BLUE);
     }
 }

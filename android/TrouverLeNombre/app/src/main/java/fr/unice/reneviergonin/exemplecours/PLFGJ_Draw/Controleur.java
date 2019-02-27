@@ -40,7 +40,7 @@ public class Controleur {
 
     public void finPartie() {
         vue.afficheMessage("bravo !!");
-        vue.finit();
+
     }
 
     public void jeRejoue() {

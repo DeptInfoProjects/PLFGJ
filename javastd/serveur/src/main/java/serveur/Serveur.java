@@ -120,7 +120,7 @@ public class Serveur {
             e.printStackTrace();
         }
         Configuration config = new Configuration();
-        config.setHostname("10.1.119.84");
+        config.setHostname("10.1.97.74");
         //config.setHostname("172.20.10.2");
         config.setPort(10101);
 

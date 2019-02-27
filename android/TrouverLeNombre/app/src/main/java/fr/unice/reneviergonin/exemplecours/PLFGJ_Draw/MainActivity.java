@@ -9,11 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class MainActivity extends Activity implements Vue {
 
-    Button btnJouer;
+    Button btnJouer ;
+    Button start;
     TextView msg;
-    EditText valeur;
+    TextView fdem;
+    TextView randform ;
     MyCanvas myCanvas;
 
     Controleur ctrl;
@@ -28,9 +32,22 @@ public class MainActivity extends Activity implements Vue {
         setContentView(R.layout.activity_main);
 
         // récupération des widget
-        btnJouer= findViewById(R.id.button);
+        btnJouer= findViewById(R.id.valider);
+        start = findViewById(R.id.start);
         msg = findViewById(R.id.textView);
-        valeur = findViewById(R.id.editText);
+        fdem = findViewById(R.id.textView4);
+        randform = findViewById(R.id.textView3);
+        final String[] formes = {"Point","Segment","Triangle","Carré","Rond"} ;
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Random rand = new Random();
+                int rando = rand.nextInt(5);
+                randform.setText(formes[rando]);
+            }
+        });
+
 
         // création de la logique de l'application
         ctrl = new Controleur(this);
@@ -39,7 +56,7 @@ public class MainActivity extends Activity implements Vue {
         // connexion : grandement récupérer de client (javastd)
         // juste un découpage par rapport à javastd : on "refactore"
         // adresse pour parler depuis l'émulateur à la machien hote : 10.0.2.2
-        Connexion connexion = new Connexion("http://10.1.119.84:10101", ctrl);
+        Connexion connexion = new Connexion("http://10.1.97.74:10101", ctrl);
 
         // ici pas d'IA mais un joueur humain
 
@@ -64,6 +81,9 @@ public class MainActivity extends Activity implements Vue {
     }
 
 
+
+
+
     // adapteur entre le controleur et la vue, pour que le controleur ne dépendent pas d'android
     private void ajouteÉcouteur() {
         btnJouer.setOnClickListener(new View.OnClickListener() {
@@ -74,26 +94,7 @@ public class MainActivity extends Activity implements Vue {
         });
     }
 
-    @Override
-    public int valeurJouée() {
-        String saisie = valeur.getText().toString();
-        int val = -1;
-        Log.e("debug", "saisie = "+saisie);
-        if ((saisie != null) && (! saisie.equals(""))) {
-            val = Integer.parseInt(saisie);
-        }
-        return val;
-    }
 
-    @Override
-    public void finit() {
-        // appelé depuis le thread de socketIO
-        btnJouer.post(new Runnable() {
-            @Override
-            public void run() {
-                btnJouer.setEnabled(false);
-                valeur.setEnabled(false);
-            }
-        });
-    }
+
+
 }

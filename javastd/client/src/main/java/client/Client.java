@@ -126,7 +126,7 @@ public class Client {
             e.printStackTrace();
         }
 
-        Client client = new Client("http://10.1.119.84:10101");
+        Client client = new Client("http://10.1.97.74:10101");
         client.seConnecter();
 
 

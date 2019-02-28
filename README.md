@@ -28,7 +28,9 @@ Date prevu :    15 / 02 / 2019
 ### Livraison 3 :
 Date prevu :    28 / 02 / 2019
 
-* 
+* Mise en place d'une premiere tâche : "Dessinez une forme " (aléatoire : point , segment , carré , rond , triangle)
+* Implémentation de la fonction "VALIDER" pour envoyer le croquis au serveur ,
+  "COLOR" pour switcher de couleur et "EFFACER" pour réinitialiser le canvas
 * Test sur les tâches réalisées
 
 ### Livraison 4 :

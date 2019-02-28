@@ -109,9 +109,12 @@ public class Connexion  {
         connexion.emit("identification", pieceJointe);
     }
 
-  //  public void envoyerString() {
-  //      connexion.emit("Bien recu");
-  //  }
+
+    public void envoyerString() {
+        connexion.emit("Bien recu");
+    }
+
+
 
     public void envoyerCoup(int val) {
         connexion.emit("réponse",val);

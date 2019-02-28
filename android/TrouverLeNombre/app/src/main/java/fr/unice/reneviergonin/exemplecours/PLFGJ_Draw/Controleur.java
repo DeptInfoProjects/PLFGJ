@@ -37,6 +37,9 @@ public class Controleur {
         connexion.envoyerId(moi);
     }
 
+    public void jouer(){
+        connexion.envoyerString();
+    }
 
 
 }

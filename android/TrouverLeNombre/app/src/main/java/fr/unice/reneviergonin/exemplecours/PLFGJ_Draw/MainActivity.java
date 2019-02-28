@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements Vue {
         // connexion : grandement récupérer de client (javastd)
         // juste un découpage par rapport à javastd : on "refactore"
         // adresse pour parler depuis l'émulateur à la machien hote : 10.0.2.2
-        Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.179:10101", ctrl);
 
         // ici pas d'IA mais un joueur humain
 
@@ -105,7 +105,7 @@ public class MainActivity extends Activity implements Vue {
             @Override
             public void onClick(View v) {
                // ctrl.apresDessin();
-               // ctrl.jeRejoue();
+               ctrl.jouer();
             }
         });
     }

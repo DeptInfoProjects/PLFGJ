@@ -78,6 +78,17 @@ public class Serveur {
             }
         });
 
+        serveur.addEventListener("Bien recu", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
+                System.out.println("Serveur : forme bien reçu , bravo ! ");
+
+
+            }
+
+
+        });
+
 
 
     }
@@ -121,7 +132,7 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         //config.setHostname("10.1.119.84");
-        config.setHostname("10.1.124.22");
+        config.setHostname("192.168.43.179");
         config.setPort(10101);
 
 

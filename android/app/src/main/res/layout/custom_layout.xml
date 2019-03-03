@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_custom_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:background="#ab2fc4"
+    >
+
+    <ImageButton
+        android:id="@+id/ib_close"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:background="@null"
+        android:src="@drawable/xbutton" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:padding="25sp"
+        android:text="                TUTORIEL ONGLE DETECTOR:
+
+Le jeux donne une forme geometrique et le joueur faut donner les ongles de cette forme.
+
+p.e :
+           segment  : faut taper 2 fois sur l'ecran
+           trinagle    : faut taper 3 fois sur l'ecran
+           carre         : faut taper 4 fois sur l'ecran
+           rond          : faut taper 1 fois sur l'ecran
+
+
+
+
+                                                   Bonne chance
+                      "
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</RelativeLayout>

@@ -1,5 +1,4 @@
 package serveur;
-
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -11,6 +10,7 @@ import commun.Identification;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -81,11 +81,35 @@ public class Serveur {
         serveur.addEventListener("Bien recu", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
-                System.out.println("Serveur : forme bien reçu , bravo ! ");
-
-
+                System.out.println("Serveur : Forme bien reçu , bravo ! ");
             }
+        });
 
+        serveur.addEventListener("Changer forme", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient,Object o , AckRequest ackRequest) throws  Exception{
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("Client  : Changement de forme geometrique ");
+                System.out.println("Serveur : Forme demandé a changé " );
+            }
+        });
+
+        serveur.addEventListener("Effacer le Canvas", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("Client  : Effacement du Canvas");
+                System.out.println("Serveur : Nouveau Canvas a votre disposition ");
+            }
+        });
+
+        serveur.addEventListener("Changer couleur", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("Client  : Changement de Couleur");
+                System.out.println("Serveur : Nouvelle Couleur a votre disposition ");
+            }
 
         });
 
@@ -132,7 +156,8 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         //config.setHostname("10.1.119.84");
-        config.setHostname("192.168.43.179");
+        //config.setHostname("192.168.43.179");
+        config.setHostname("192.168.0.18");
         config.setPort(10101);
 
 

@@ -14,15 +14,12 @@ public class Controleur {
     public void setConnexion(Connexion connexion) {
         this.connexion = connexion;
     }
-    public void aprèsConnexion() {
-        connexion.envoyerId(moi);
-    }
-    public void pressValider()  {connexion.envoyerString(); }
-    public void pressStart()    {connexion.envoyerStart();}
-
-    public void pressReset()    {connexion.envoyerReset();}
-
-    public void pressColor()    {connexion.envoyerColor();}
+    public void aprèsConnexion() {connexion.envoyerId(moi);}
+    public void msgValider()     {connexion.envoyerValider();}
+    public void msgStart()       {connexion.envoyerStart();}
+    public void msgReset()       {connexion.envoyerReset();}
+    public void msgColor()       {connexion.envoyerColor();}
+    public void msgTutoriel()    {connexion.envoyerTutoriel();}
 
 
 

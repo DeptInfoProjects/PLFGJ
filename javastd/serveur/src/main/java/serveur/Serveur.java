@@ -28,16 +28,13 @@ public class Serveur {
 
 
     public Serveur(Configuration config) {
-        // creation du serveur
         serveur = new SocketIOServer(config);
-
-        // Objet de synchro
-
         System.out.println("préparation du listener");
 
         // on accept une connexion
         serveur.addConnectListener(new ConnectListener() {
             public void onConnect(SocketIOClient socketIOClient) {
+                System.out.println("-------------------------------------------------------------");
                 System.out.println("connexion de "+socketIOClient.getRemoteAddress());
 
                 // on ne s'arrête plus ici
@@ -78,14 +75,16 @@ public class Serveur {
             }
         });
 
-        serveur.addEventListener("Bien recu", Object.class, new DataListener<Object>() {
+        serveur.addEventListener("Bien recu1", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("Client  : Dessin Envoyé ");
                 System.out.println("Serveur : Forme bien reçu , bravo ! ");
             }
         });
 
-        serveur.addEventListener("Changer forme", Object.class, new DataListener<Object>() {
+        serveur.addEventListener("Bien recu2", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o , AckRequest ackRequest) throws  Exception{
                 System.out.println("-------------------------------------------------------------");
@@ -94,7 +93,7 @@ public class Serveur {
             }
         });
 
-        serveur.addEventListener("Effacer le Canvas", Object.class, new DataListener<Object>() {
+        serveur.addEventListener("Bien recu3", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
                 System.out.println("-------------------------------------------------------------");
@@ -103,16 +102,23 @@ public class Serveur {
             }
         });
 
-        serveur.addEventListener("Changer couleur", Object.class, new DataListener<Object>() {
+        serveur.addEventListener("Bien recu4", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
                 System.out.println("-------------------------------------------------------------");
                 System.out.println("Client  : Changement de Couleur");
-                System.out.println("Serveur : Nouvelle Couleur a votre disposition ");
+                System.out.println("Serveur : Nouvelle couleur a votre disposition ");
             }
-
         });
 
+        serveur.addEventListener("Bien recu5", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
+                System.out.println("-------------------------------------------------------------");
+                System.out.println("Client  : Affichage de Tuto");
+                System.out.println("Serveur : Tutoriel du jeu a votre disposition ");
+            }
+        });
 
 
     }
@@ -155,9 +161,11 @@ public class Serveur {
             e.printStackTrace();
         }
         Configuration config = new Configuration();
-        //config.setHostname("10.1.119.84");
+        //fac
+        config.setHostname("10.1.124.22");
         //config.setHostname("192.168.43.179");
-        config.setHostname("192.168.0.18");
+        //spiti
+        //config.setHostname("192.168.0.18");
         config.setPort(10101);
 
 

@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 public class PaintView extends View implements View.OnTouchListener {
     private final int defaultDot = 10;
-    private final int defaultColor = Color.GREEN;
+    private final int defaultColor = Color.GRAY;
     private int mPenColor;
     private int mDotSize;
     private float mX,mY,mOldX,mOldY;
-
+    public int countTicks;
     private ArrayList<Path> mPaths;
     private ArrayList<Paint> mPaints;
     private Path mPath;
@@ -40,7 +40,11 @@ public class PaintView extends View implements View.OnTouchListener {
         this.mPath = new Path();
         this.addPath(false);
         this.mX = this.mY = this.mOldY = this.mOldX =  (float) 0.0;
+        this.countTicks = 0;
         this.setOnTouchListener(this);
+    }
+    public int getTicks(){
+        return this.countTicks;
     }
 
     public void addPath(boolean fill){
@@ -60,6 +64,9 @@ public class PaintView extends View implements View.OnTouchListener {
         canvas.drawPath(mPath,mPaint);
     }
 
+    public void getPaths(){
+        System.out.println(mPaths);
+    }
     public void setPenColor(int penColor){
         this.mPenColor = penColor;
         this.mPaint.setColor(mPenColor);
@@ -76,9 +83,14 @@ public class PaintView extends View implements View.OnTouchListener {
         this.init();
     }
 
-    public void reset() {
+    public void reset(int PenColor) {
         this.init();
         this.invalidate();
+        setPenColor(PenColor);
+        this.countTicks = 0;
+    }
+    public void addTick(){
+        this.countTicks = this.countTicks + 1;
     }
 
     @Override
@@ -92,16 +104,21 @@ public class PaintView extends View implements View.OnTouchListener {
                 this.mPath.addCircle(mX,mY,mDotSize/2,Path.Direction.CW);
                 this.addPath(false);
                 this.mPath.moveTo(mX,mY);
+                this.addTick();
+
                 break;
             case MotionEvent.ACTION_MOVE:
                 this.mPath.lineTo(mX,mY);
+
                 break;
             case MotionEvent.ACTION_UP:
                 this.addPath(true);
                 if (mOldX == mX && mOldY == mY)
                     this.mPath.addCircle(mX,mY,mDotSize/2,Path.Direction.CW);
+
                 break;
         }
+
         this.invalidate();
         mOldX = mX;
         mOldY = mY;

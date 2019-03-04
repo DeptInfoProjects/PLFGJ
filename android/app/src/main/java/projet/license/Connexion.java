@@ -113,17 +113,14 @@ public class Connexion {
         }
         connexion.emit("identification", pieceJointe);
     }
-    public void envoyerStart(){connexion.emit("Changer forme");}
-
-    public void envoyerReset(){connexion.emit("Effacer le Canvas");}
-
-    public void envoyerColor(){connexion.emit("Changer couleur ");}
-
-    public void envoyerString() {
-        connexion.emit("Bien recu" );
+    public void envoyerStart() {
+        connexion.emit("Bien recu2" );
     }
-
-    public void envoyerCoup(int val) {
-        connexion.emit("réponse",val);
+    public void envoyerReset() {
+        connexion.emit("Bien recu3" );
     }
+    public void envoyerColor() { connexion.emit("Bien recu4" ); }
+    public void envoyerValider() {connexion.emit("Bien recu1" ); }
+    public void envoyerTutoriel(){connexion.emit("Bien recu5");}
+
 }

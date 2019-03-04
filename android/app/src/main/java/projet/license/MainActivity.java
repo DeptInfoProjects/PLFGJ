@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,36 +23,30 @@ import java.util.Random;
 
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener{
 
-    private Button effacer , couleur,btnJouer,start,exit,tutoriel ;
-    private TextView msg,fdem,randform;
-    TextView titre;
+    private Button effacer, couleur, btnJouer, start, exit, tutoriel;
+    private TextView msg, fdem, randform, click;
     Controleur ctrl;
     public int i = 0;
+
+
     private PaintView myCanvas;
-    final String[] formes = {"Point","Segment","Triangle","Carre","Rond"} ;
+    final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
     private RelativeLayout mRelativeLayout;
     private PopupWindow mPopUp;
     private Context mContext;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.init();
 
 
         ctrl = new Controleur();
-        pressValider();
-        //pressCouleur();
-        //pressEffacer();
-        //pressStart();
-
-        Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
+        Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -67,6 +62,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         randform = findViewById(R.id.textView3);
         tutoriel = findViewById(R.id.tutoriel);
         exit = findViewById(R.id.exit);
+        click = (TextView) findViewById(R.id.click);
 
         mContext = getApplicationContext();
         mRelativeLayout = (RelativeLayout) findViewById(R.id.container);
@@ -80,17 +76,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
-    public void afficheMessage(final String texte) {
 
-        // appelÃ© depuis le thread de socketIO
-        msg.post(new Runnable() {
-            @Override
-            public void run() {
-                msg.setText(texte);
-            }
-        });
+    //private void
 
-    }
+
 
     private void changeTheme(int choix) {
         couleur.setBackgroundColor(choix);
@@ -111,61 +100,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
         tutoriel.setTextColor(Color.WHITE);
         exit.setBackgroundColor(choix);
         exit.setTextColor(Color.WHITE);
+        click.setBackgroundColor(choix);
+        click.setTextColor(Color.WHITE);
 
 
     }
 
-    private void pressValider() {
-        btnJouer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ctrl.apresDessin();
-                ctrl.pressValider();
-            }
-        });
-    }
-    private void pressStart() {
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ctrl.pressStart();
-            }
-        });
-    }
-    private void pressEffacer() {
-        effacer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ctrl.pressReset();
-            }
-        });
-    }
-
-    private void pressCouleur(){
-       couleur.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ctrl.pressColor();
-            }
-        });
-    }
-
-    private int getColor(){
+    private int getColor() {
         switch (this.i) {
             case 0:
-                this.i = this.i+1;
+                this.i = this.i + 1;
                 changeTheme(Color.GREEN);
                 return Color.GREEN;
             case 1:
-                this.i = this.i+1;
+                this.i = this.i + 1;
                 changeTheme(Color.LTGRAY);
                 return Color.LTGRAY;
             case 2:
-                this.i = this.i+1;
+                this.i = this.i + 1;
                 changeTheme(Color.BLACK);
                 return Color.BLACK;
             case 3:
-                this.i = this.i +1;
+                this.i = this.i + 1;
                 changeTheme(Color.RED);
                 return Color.RED;
             case 4:
@@ -177,28 +133,64 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+    private int getColorEffacer() {
+        switch (this.i - 1) {
+            case 0:
+                changeTheme(Color.GREEN);
+                return Color.GREEN;
+            case 1:
+                changeTheme(Color.LTGRAY);
+                return Color.LTGRAY;
+            case 2:
+                changeTheme(Color.BLACK);
+                return Color.BLACK;
+            case 3:
+                changeTheme(Color.RED);
+                return Color.RED;
+            case 4:
+                changeTheme(Color.BLUE);
+                return Color.BLUE;
+        }
+        return Color.BLUE;
+    }
+
+    private void afficherTick() {
+        click.setText(myCanvas.countTicks+"");
+    }
     public void onClick(View v){
         Button press = (Button)findViewById(v.getId());
-
         switch (v.getId()){
             case R.id.effacer:
-                myCanvas.reset();
+                myCanvas.reset(getColorEffacer());
+                ctrl.msgReset();
+                myCanvas.countTicks = 0;
+                afficherTick();
                 Log.d("Button Pressed : ",press.getText() + "");
                 break;
             case R.id.start:
+                myCanvas.reset(getColorEffacer());
                 Random rand = new Random();
                 int rando = rand.nextInt(5);
                 randform.setText(formes[rando]);
+                ctrl.msgStart();
                 Log.d("Button Pressed : ",press.getText() + "");
+                myCanvas.countTicks = 0;
+                afficherTick();
                 break;
             case R.id.color:
                 myCanvas.setPenColor(getColor());
+                ctrl.msgColor();
                 Log.d("Button Pressed : ", press.getText() + "");
                 break;
             case R.id.valider:
+                ctrl.msgValider();
                 Log.d("Button Pressed : ",press.getText() + "");
+
+                afficherTick();
+                myCanvas.countTicks = 0;
                 break;
             case R.id.tutoriel:
+                ctrl.msgTutoriel();
                 LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customView = inflater.inflate(R.layout.custom_layout,null);
 
@@ -220,6 +212,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
                 break;
         }
+
+
+
     }
 }
 

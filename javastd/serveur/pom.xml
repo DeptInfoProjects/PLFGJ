@@ -22,7 +22,7 @@
     </properties>
 
     <build>
-        <sourceDirectory>src/main/java/serveur</sourceDirectory>  <!-- éventuellement à changer : localisation des fichiers sources -->
+        <sourceDirectory>src/main/java</sourceDirectory>  <!-- éventuellement à changer : localisation des fichiers sources -->
 
 
         <plugins>

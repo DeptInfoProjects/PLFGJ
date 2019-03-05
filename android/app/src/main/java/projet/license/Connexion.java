@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import commun.Coup;
 import commun.Identification;
+import commun.ListDemande;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -21,7 +22,6 @@ public class Connexion {
 
     private final Controleur controleur;
     Socket connexion;
-
 
     public Connexion(String urlServeur, Controleur ctrl) {
         this.controleur = ctrl;
@@ -120,7 +120,10 @@ public class Connexion {
         connexion.emit("Bien recu3" );
     }
     public void envoyerColor() { connexion.emit("Bien recu4" ); }
-    public void envoyerValider() {connexion.emit("Bien recu1" ); }
+    public void envoyerValider(String list) {
+        connexion.emit("nbpoints", list);
+    }
     public void envoyerTutoriel(){connexion.emit("Bien recu5");}
+
 
 }

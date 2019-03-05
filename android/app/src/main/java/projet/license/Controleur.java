@@ -1,6 +1,9 @@
 package projet.license;
 
+import java.util.List;
+
 import commun.Identification;
+import commun.ListDemande;
 
 public class Controleur {
     Connexion connexion;
@@ -11,11 +14,12 @@ public class Controleur {
     }
 
 
+
     public void setConnexion(Connexion connexion) {
         this.connexion = connexion;
     }
     public void aprèsConnexion() {connexion.envoyerId(moi);}
-    public void msgValider()     {connexion.envoyerValider();}
+    public void msgValider(String list)     {connexion.envoyerValider(list);}
     public void msgStart()       {connexion.envoyerStart();}
     public void msgReset()       {connexion.envoyerReset();}
     public void msgColor()       {connexion.envoyerColor();}

@@ -1,5 +1,7 @@
 package commun;
 
+
+
 public class Coup {
     private int coup ;
     private boolean plusGrand;

@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,9 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-
+import commun.ListDemande;
 
 
 public class MainActivity extends Activity implements View.OnClickListener{
@@ -29,7 +31,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private TextView msg, fdem, randform, click;
     Controleur ctrl;
     public int i = 0;
-
+    private String formeDemande = "Press start";
+    private ListDemande listDemande = new ListDemande();
 
     private PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
@@ -46,7 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 
         ctrl = new Controleur();
-        Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.60:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -75,11 +78,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         tutoriel.setOnClickListener(this);
 
     }
-
-
-    //private void
-
-
 
     private void changeTheme(int choix) {
         couleur.setBackgroundColor(choix);
@@ -157,6 +155,16 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private void afficherTick() {
         click.setText(myCanvas.countTicks+"");
     }
+
+    public void newForme(){
+        Random rand = new Random();
+        int rando = rand.nextInt(5);
+        String formeRandom = formes[rando];
+        randform.setText(formeRandom);
+        formeDemande = formeRandom;
+        listDemande.setForme(formes[rando]);
+        listDemande.setTicks(0);
+    }
     public void onClick(View v){
         Button press = (Button)findViewById(v.getId());
         switch (v.getId()){
@@ -164,14 +172,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 myCanvas.reset(getColorEffacer());
                 ctrl.msgReset();
                 myCanvas.countTicks = 0;
+                listDemande.setTicks(0);
                 afficherTick();
                 Log.d("Button Pressed : ",press.getText() + "");
                 break;
             case R.id.start:
                 myCanvas.reset(getColorEffacer());
-                Random rand = new Random();
-                int rando = rand.nextInt(5);
-                randform.setText(formes[rando]);
+                newForme();
                 ctrl.msgStart();
                 Log.d("Button Pressed : ",press.getText() + "");
                 myCanvas.countTicks = 0;
@@ -183,9 +190,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 Log.d("Button Pressed : ", press.getText() + "");
                 break;
             case R.id.valider:
-                ctrl.msgValider();
+                ctrl.msgValider(formeDemande +"," + myCanvas.getTicks());
                 Log.d("Button Pressed : ",press.getText() + "");
-
                 afficherTick();
                 myCanvas.countTicks = 0;
                 break;
@@ -212,9 +218,13 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
                 break;
         }
-
-
-
     }
-}
+
+
+    public void drawlines(){
+        myCanvas.getCanvas().drawLines(myCanvas.getCoord(),myCanvas.getmPaint());
+    }
+
+ }
+
 

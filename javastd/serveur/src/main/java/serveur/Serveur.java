@@ -8,30 +8,22 @@ import com.corundumstudio.socketio.listener.DataListener;
 import commun.Coup;
 import commun.Identification;
 
+
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.net.Socket;
 import java.util.ArrayList;
 
-/**
- * attend une connexion, on envoie une question puis on attend une réponse, jusqu'à la découverte de la bonne réponse
- * le client s'identifie (som, niveau)
- */
 public class Serveur {
-
     SocketIOServer serveur;
     final Object attenteConnexion = new Object();
     private int àTrouvé = 42;
     Identification leClient ;
-
     ArrayList<Coup> coups = new ArrayList<>();
 
 
-    public Serveur(Configuration config) {
+    public Serveur(Configuration config)  {
         serveur = new SocketIOServer(config);
         System.out.println("préparation du listener");
-
-        // on accept une connexion
         serveur.addConnectListener(new ConnectListener() {
             public void onConnect(SocketIOClient socketIOClient) {
                 System.out.println("-------------------------------------------------------------");
@@ -40,8 +32,6 @@ public class Serveur {
                 // on ne s'arrête plus ici
             }
         });
-
-        // réception d'une identification
         serveur.addEventListener("identification", Identification.class, new DataListener<Identification>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Identification identification, AckRequest ackRequest) throws Exception {
@@ -52,9 +42,6 @@ public class Serveur {
                 poserUneQuestion(socketIOClient);
             }
         });
-
-
-            // on attend une réponse
         serveur.addEventListener("réponse", int.class, new DataListener<Integer>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Integer integer, AckRequest ackRequest) throws Exception {
@@ -74,15 +61,26 @@ public class Serveur {
 
             }
         });
-
-        serveur.addEventListener("Bien recu1", Object.class, new DataListener<Object>() {
+        serveur.addEventListener("nbpoints", String.class, new DataListener<String>() {
             @Override
-            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Client  : Dessin Envoyé ");
-                System.out.println("Serveur : Forme bien reçu , bravo ! ");
+            public void onData(SocketIOClient socketIOClient, String forme2, AckRequest ackRequest) throws Exception {
+                String[] list = forme2.split(",");
+                if (verifier(list) == true) {
+                    System.out.println("---------------------------------------------------------------");
+                    System.out.println("Forme demandé   : " + list[0]);
+                    System.out.println("Points donné    : " + list[1]);
+                    System.out.println("Serveur :  Forme valide , passez a la prochaine ");
+                } else {
+                    System.out.println("---------------------------------------------------------------");
+                    System.out.println("Forme demandé   : " + list[0]);
+                    System.out.println("Points donné    : " + list[1]);
+                    System.out.println("Serveur :  Forme pas valide , passez a la prochaine ");
+                }
+
             }
-        });
+        } );
+
+
 
         serveur.addEventListener("Bien recu2", Object.class, new DataListener<Object>() {
             @Override
@@ -92,7 +90,6 @@ public class Serveur {
                 System.out.println("Serveur : Forme demandé a changé " );
             }
         });
-
         serveur.addEventListener("Bien recu3", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -101,7 +98,6 @@ public class Serveur {
                 System.out.println("Serveur : Nouveau Canvas a votre disposition ");
             }
         });
-
         serveur.addEventListener("Bien recu4", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -110,7 +106,6 @@ public class Serveur {
                 System.out.println("Serveur : Nouvelle couleur a votre disposition ");
             }
         });
-
         serveur.addEventListener("Bien recu5", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -121,9 +116,7 @@ public class Serveur {
         });
 
 
-    }
-
-
+        }
     private void démarrer() {
 
         serveur.start();
@@ -142,17 +135,26 @@ public class Serveur {
         serveur.stop();
 
     }
-
-
     private void poserUneQuestion(SocketIOClient socketIOClient) {
         socketIOClient.sendEvent("question");
     }
-
     private void poserUneQuestion(SocketIOClient socketIOClient, boolean plusGrand) {
         socketIOClient.sendEvent("question", plusGrand, coups);
     }
 
-
+    private boolean verifier(String[] args){
+        if (args[0].equals("Triangle") && args[1].equals("3")){
+            return true;}
+        if (args[0].equals("Rond") && args[1].equals("5")){
+            return true;}
+        if (args[0].equals("Carre") && args[1].equals("4")){
+            return true;}
+        if (args[0].equals("Segment") && args[1].equals("2")){
+            return true;}
+        if (args[0].equals("Point") && args[1].equals("1")){
+            return true;}
+        return false;
+    }
 
     public static final void main(String []args) {
         try {
@@ -162,10 +164,12 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         //fac
-        config.setHostname("10.1.124.22");
-        //config.setHostname("192.168.43.179");
+        //config.setHostname("10.1.124.22");
+        config.setHostname("192.168.43.60");
         //spiti
         //config.setHostname("192.168.0.18");
+        //maison sabri
+        //config.setHostname("192.168.1.26");
         config.setPort(10101);
 
 

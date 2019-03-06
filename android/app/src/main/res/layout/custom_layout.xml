@@ -26,15 +26,15 @@
         android:layout_width="409dp"
         android:layout_height="wrap_content"
         android:padding="25sp"
-        android:text="                TUTORIEL ONGLE DETECTOR:
+        android:text="                TUTORIEL TOUCH DETECTOR:
 
-Le jeux donne une forme geometrique et le joueur faut donner les ongles de cette forme.
+Appuyez sur START pour commencer à jouer puis dessinez les cotés de la forme une par une selon les instructions :\n
 
-p.e :
-           segment  : faut taper 2 fois sur l'ecran
-           trinagle    : faut taper 3 fois sur l'ecran
-           carre         : faut taper 4 fois sur l'ecran
-           rond          : faut taper 1 fois sur l'ecran
+p.e :\n
+           SEGMENT  : il faut taper 2 fois sur l'ecran\n
+           TRIANGLE    : il faut taper 3 fois sur l'ecran ou faire les 3 traits\n
+           CARRE         : faut taper 4 fois sur l'ecran ou faire les 4 traits\n
+           ROND          : faut taper 5 fois sur l'ecran\n
 
 
 

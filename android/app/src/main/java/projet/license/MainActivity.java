@@ -24,13 +24,16 @@ import java.util.Random;
 
 import commun.ListDemande;
 
+import static android.graphics.Color.GREEN;
 
-public class MainActivity extends Activity implements View.OnClickListener{
 
-    private Button effacer, couleur, btnJouer, start, exit, tutoriel;
-    private TextView msg, fdem, randform, click;
+public class MainActivity extends Activity implements View.OnClickListener, Affichage{
+
+    private Button effacer, couleur, btnJouer, start, tutoriel;
+    private TextView msg, fdem, randform, click, score;
     Controleur ctrl;
     public int i = 0;
+    public static int scor = 0;
     private String formeDemande = "Press start";
     private ListDemande listDemande = new ListDemande();
 
@@ -48,12 +51,14 @@ public class MainActivity extends Activity implements View.OnClickListener{
         this.init();
 
 
-        ctrl = new Controleur();
-        Connexion connexion = new Connexion("http://192.168.43.60:10101", ctrl);
+        ctrl = new Controleur(this);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
         connexion.seConnecter();
 
 
     }
+
+
 
     private void init() {
         effacer = findViewById(R.id.effacer);
@@ -64,7 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         fdem = findViewById(R.id.textView4);
         randform = findViewById(R.id.textView3);
         tutoriel = findViewById(R.id.tutoriel);
-        exit = findViewById(R.id.exit);
+        score = findViewById(R.id.score);
         click = (TextView) findViewById(R.id.click);
 
         mContext = getApplicationContext();
@@ -96,8 +101,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         randform.setTextColor(Color.WHITE);
         tutoriel.setBackgroundColor(choix);
         tutoriel.setTextColor(Color.WHITE);
-        exit.setBackgroundColor(choix);
-        exit.setTextColor(Color.WHITE);
+        score.setBackgroundColor(choix);
+        score.setTextColor(Color.WHITE);
         click.setBackgroundColor(choix);
         click.setTextColor(Color.WHITE);
 
@@ -108,8 +113,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         switch (this.i) {
             case 0:
                 this.i = this.i + 1;
-                changeTheme(Color.GREEN);
-                return Color.GREEN;
+                changeTheme(GREEN);
+                return GREEN;
             case 1:
                 this.i = this.i + 1;
                 changeTheme(Color.LTGRAY);
@@ -134,8 +139,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private int getColorEffacer() {
         switch (this.i - 1) {
             case 0:
-                changeTheme(Color.GREEN);
-                return Color.GREEN;
+                changeTheme(GREEN);
+                return GREEN;
             case 1:
                 changeTheme(Color.LTGRAY);
                 return Color.LTGRAY;
@@ -194,6 +199,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
+                myCanvas.reset(getColorEffacer());
                 break;
             case R.id.tutoriel:
                 ctrl.msgTutoriel();
@@ -218,6 +224,27 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
                 break;
         }
+    }
+
+
+    public void majScor(final boolean b){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (b){
+                    String txt = ("Juste");
+                    score.setText(txt);
+                    score.setBackgroundColor(Color.GREEN);
+                }
+                else {
+                    String txt = ("Faux");
+                    score.setText(txt);
+                    score.setBackgroundColor(Color.RED);
+
+                }
+            }
+        });
+
     }
 
 

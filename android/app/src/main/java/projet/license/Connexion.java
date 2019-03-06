@@ -23,7 +23,7 @@ public class Connexion {
     private final Controleur controleur;
     Socket connexion;
 
-    public Connexion(String urlServeur, Controleur ctrl) {
+    public Connexion(String urlServeur, final Controleur ctrl) {
         this.controleur = ctrl;
         controleur.setConnexion(this);
 
@@ -85,6 +85,25 @@ public class Connexion {
                 }
             });
 
+
+            connexion.on("forme_valide", new Emitter.Listener() {
+                @Override
+                public void call(Object... objects) {
+                    System.out.println("on a reçu une verification avec"+objects.length+" paramètre(s) ");
+                    if (objects.length > 0 ) {
+                        boolean verif = (Boolean)objects[0];
+                        if(verif) {
+                            System.out.println("le nombre de points est correcte");
+                            ctrl.majScor(verif);
+                        }
+                        else {
+                            System.out.println("le nombre de points est incorrecte");
+                            ctrl.majScor(verif);
+                        }
+
+                    }
+                }
+            });
 
 
         } catch (URISyntaxException e) {

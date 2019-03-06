@@ -9,6 +9,12 @@ public class Controleur {
     Connexion connexion;
     int dernierCoup = -1;
     final Identification moi = new Identification("Moi sur Android", 1000);
+    private Affichage affichage;
+
+    public Controleur(Affichage mainActivity) {
+        setAffichage(mainActivity);
+    }
+
     public Connexion getConnexion() {
         return connexion;
     }
@@ -26,5 +32,15 @@ public class Controleur {
     public void msgTutoriel()    {connexion.envoyerTutoriel();}
 
 
+    public void majScor(boolean verif) {
+        getAffichage().majScor(verif);
+    }
 
+    public void setAffichage(Affichage affichage) {
+        this.affichage = affichage;
+    }
+
+    public Affichage getAffichage() {
+        return affichage;
+    }
 }

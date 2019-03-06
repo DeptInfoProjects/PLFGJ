@@ -106,15 +106,16 @@
         android:text="HOW TO PLAY"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/exit"
-        android:layout_width="104dp"
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="138dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
-        android:text="exit"
+        android:text=" "
+        android:textSize="30sp"
         android:textStyle="bold" />
 
 
@@ -138,7 +139,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginEnd="17dp"
         android:layout_marginBottom="0dp"
-        android:layout_toStartOf="@+id/exit"
+        android:layout_toStartOf="@+id/score"
         android:layout_toEndOf="@+id/tutoriel"
         android:text="0"
         android:textAlignment="center"

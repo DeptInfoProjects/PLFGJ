@@ -65,16 +65,20 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, String forme2, AckRequest ackRequest) throws Exception {
                 String[] list = forme2.split(",");
-                if (verifier(list) == true) {
+                boolean verif = verifier(list);
+                if ( verif ) {
                     System.out.println("---------------------------------------------------------------");
                     System.out.println("Forme demandé   : " + list[0]);
                     System.out.println("Points donné    : " + list[1]);
-                    System.out.println("Serveur :  Forme valide , passez a la prochaine ");
+                    System.out.println("Serveur :  Forme valide , le client passe a la prochaine ");
+                    formeValide(socketIOClient, verif);
+
                 } else {
                     System.out.println("---------------------------------------------------------------");
                     System.out.println("Forme demandé   : " + list[0]);
                     System.out.println("Points donné    : " + list[1]);
-                    System.out.println("Serveur :  Forme pas valide , passez a la prochaine ");
+                    System.out.println("Serveur :  Forme pas valide , le client passe a la prochaine ");
+                    formeValide(socketIOClient, verif);
                 }
 
             }
@@ -90,6 +94,7 @@ public class Serveur {
                 System.out.println("Serveur : Forme demandé a changé " );
             }
         });
+
         serveur.addEventListener("Bien recu3", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -98,6 +103,7 @@ public class Serveur {
                 System.out.println("Serveur : Nouveau Canvas a votre disposition ");
             }
         });
+
         serveur.addEventListener("Bien recu4", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -106,6 +112,7 @@ public class Serveur {
                 System.out.println("Serveur : Nouvelle couleur a votre disposition ");
             }
         });
+
         serveur.addEventListener("Bien recu5", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
@@ -138,9 +145,20 @@ public class Serveur {
     private void poserUneQuestion(SocketIOClient socketIOClient) {
         socketIOClient.sendEvent("question");
     }
+
     private void poserUneQuestion(SocketIOClient socketIOClient, boolean plusGrand) {
         socketIOClient.sendEvent("question", plusGrand, coups);
     }
+
+
+
+
+    private void formeValide(SocketIOClient socketIOClient, boolean verif) {
+        socketIOClient.sendEvent("forme_valide", verif);
+    }
+
+
+
 
     private boolean verifier(String[] args){
         if (args[0].equals("Triangle") && args[1].equals("3")){
@@ -165,7 +183,7 @@ public class Serveur {
         Configuration config = new Configuration();
         //fac
         //config.setHostname("10.1.124.22");
-        config.setHostname("192.168.43.60");
+        config.setHostname("172.20.10.2");
         //spiti
         //config.setHostname("192.168.0.18");
         //maison sabri

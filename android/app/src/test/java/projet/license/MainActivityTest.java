@@ -10,7 +10,6 @@ public class MainActivityTest {
 
     @Test
     public void onCreate() {
-        Connexion connexion = new Connexion()
     }
 
     @Test

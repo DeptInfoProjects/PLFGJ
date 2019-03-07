@@ -7,11 +7,12 @@ Implémentation d'un jeu simple sur la reconnaissance du dessin. Le serveur dema
 Lorsqu'un trait est déssiné, il est considéré comme un point.
 Le client peut changer la couleur de son crayon, ceci adapte aussi la couleur du thème en conséquence.
 
-Modification des bouttons : 
-
-Valider (le client envoie le nombre de points déssinés sur le canvas au serveur, et éfface le canvas)
+Modification des bouttons :
 
                             Start (le client demande au serveur une nouvelle forme pour commencer a jouer)
+                            
+                            Valider (le client envoie le nombre de points déssinés sur le canvas au serveur, et éfface le canvas)
+
                             
                             Effacer (le client éfface le canvas)\n
                             

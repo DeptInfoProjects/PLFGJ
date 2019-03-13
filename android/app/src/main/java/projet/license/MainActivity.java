@@ -3,9 +3,13 @@ package projet.license;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,30 +22,38 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.view.ViewGroup.LayoutParams;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import commun.ListDemande;
 
+import static android.graphics.Bitmap.CompressFormat.PNG;
 import static android.graphics.Color.GREEN;
+import static android.graphics.Color.MAGENTA;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, Affichage{
 
     private Button effacer, couleur, btnJouer, start, tutoriel;
-    private TextView msg, fdem, randform, click, score;
+    private TextView titre, fdem, randform, click, score,rightBord,leftBord;
     Controleur ctrl;
     public int i = 0;
     public static int scor = 0;
     private String formeDemande = "Press start";
     private ListDemande listDemande = new ListDemande();
-
+    private File newImage;
     private PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
     private RelativeLayout mRelativeLayout;
     private PopupWindow mPopUp;
     private Context mContext;
+    private int textCol;
+    private int kyriakos = Color.WHITE;
 
 
     @Override
@@ -52,12 +64,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
 
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
+        Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
         connexion.seConnecter();
 
 
     }
-
+    public static Bitmap viewToBitmap(View view,int width,int height){
+        Bitmap bitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        return bitmap;
+    }
 
 
     private void init() {
@@ -65,12 +81,17 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
         couleur = findViewById(R.id.color);
         btnJouer = findViewById(R.id.valider);
         start = findViewById(R.id.start);
-        msg = findViewById(R.id.textView6);
+        titre = findViewById(R.id.textView6);
         fdem = findViewById(R.id.textView4);
         randform = findViewById(R.id.textView3);
         tutoriel = findViewById(R.id.tutoriel);
         score = findViewById(R.id.score);
         click = (TextView) findViewById(R.id.click);
+        rightBord = findViewById(R.id.rightBord);
+        leftBord = findViewById(R.id.leftBord);
+
+
+
 
         mContext = getApplicationContext();
         mRelativeLayout = (RelativeLayout) findViewById(R.id.container);
@@ -85,26 +106,40 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
     }
 
     private void changeTheme(int choix) {
-        couleur.setBackgroundColor(choix);
-        couleur.setTextColor(Color.WHITE);
-        start.setBackgroundColor(choix);
-        start.setTextColor(Color.WHITE);
-        btnJouer.setBackgroundColor(choix);
-        btnJouer.setTextColor(Color.WHITE);
-        effacer.setBackgroundColor(choix);
-        effacer.setTextColor(Color.WHITE);
-        msg.setBackgroundColor(choix);
-        msg.setTextColor(Color.WHITE);
+        if(choix == Color.MAGENTA || choix ==Color.YELLOW || choix==Color.LTGRAY)
+            { textCol = Color.WHITE;}
+        else
+            { textCol = Color.DKGRAY;}
+        if(choix == Color.BLUE)
+        { textCol = Color.WHITE;}
+        //couleur.setBackgroundColor(choix);
+        couleur.setTextColor(textCol);
+        //start.setBackgroundColor(choix);
+        start.setTextColor(textCol);
+        //btnJouer.setBackgroundColor(choix);
+        btnJouer.setTextColor(textCol);
+        //effacer.setBackgroundColor(choix);
+        effacer.setTextColor(textCol);
+        titre.setBackgroundColor(choix);
+        titre.setTextColor(textCol);
         fdem.setBackgroundColor(choix);
-        fdem.setTextColor(Color.WHITE);
+        fdem.setTextColor(textCol);
         randform.setBackgroundColor(choix);
-        randform.setTextColor(Color.WHITE);
-        tutoriel.setBackgroundColor(choix);
-        tutoriel.setTextColor(Color.WHITE);
+        randform.setTextColor(textCol);
+        //tutoriel.setBackgroundColor(choix);
+        tutoriel.setTextColor(textCol);
         score.setBackgroundColor(choix);
-        score.setTextColor(Color.WHITE);
+        score.setTextColor(textCol);
         click.setBackgroundColor(choix);
-        click.setTextColor(Color.WHITE);
+        click.setTextColor(textCol);
+        rightBord.setBackgroundColor(choix);
+        rightBord.setTextColor(textCol);
+        leftBord.setBackgroundColor(choix);
+        leftBord.setTextColor(textCol);
+        mRelativeLayout.setBackgroundColor(choix);
+
+
+
 
 
     }
@@ -113,20 +148,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
         switch (this.i) {
             case 0:
                 this.i = this.i + 1;
-                changeTheme(GREEN);
-                return GREEN;
+                changeTheme(Color.BLACK);
+                return Color.BLACK;
             case 1:
                 this.i = this.i + 1;
                 changeTheme(Color.LTGRAY);
                 return Color.LTGRAY;
             case 2:
                 this.i = this.i + 1;
-                changeTheme(Color.BLACK);
-                return Color.BLACK;
+                changeTheme(Color.MAGENTA);
+                return MAGENTA;
             case 3:
                 this.i = this.i + 1;
-                changeTheme(Color.RED);
-                return Color.RED;
+                changeTheme(Color.YELLOW);
+                return Color.YELLOW;
             case 4:
                 this.i = 0;
                 changeTheme(Color.BLUE);
@@ -139,22 +174,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
     private int getColorEffacer() {
         switch (this.i - 1) {
             case 0:
-                changeTheme(GREEN);
-                return GREEN;
-            case 1:
                 changeTheme(Color.LTGRAY);
                 return Color.LTGRAY;
+            case 1:
+                changeTheme(Color.MAGENTA);
+                return Color.MAGENTA;
             case 2:
-                changeTheme(Color.BLACK);
-                return Color.BLACK;
+                changeTheme(Color.YELLOW);
+                return Color.YELLOW;
             case 3:
-                changeTheme(Color.RED);
-                return Color.RED;
-            case 4:
                 changeTheme(Color.BLUE);
                 return Color.BLUE;
+            case 4:
+                changeTheme(Color.BLACK);
+                return Color.BLACK;
         }
-        return Color.BLUE;
+        return Color.WHITE;
     }
 
     private void afficherTick() {
@@ -174,7 +209,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
         Button press = (Button)findViewById(v.getId());
         switch (v.getId()){
             case R.id.effacer:
-                myCanvas.reset(getColorEffacer());
+                myCanvas.reset(kyriakos);
                 ctrl.msgReset();
                 myCanvas.countTicks = 0;
                 listDemande.setTicks(0);
@@ -182,7 +217,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
                 Log.d("Button Pressed : ",press.getText() + "");
                 break;
             case R.id.start:
-                myCanvas.reset(getColorEffacer());
+                leftBord.setBackgroundColor(mRelativeLayout.getSolidColor());
+                rightBord.setBackgroundColor(mRelativeLayout.getSolidColor());
+                //myCanvas.reset(getColorEffacer());
                 newForme();
                 ctrl.msgStart();
                 Log.d("Button Pressed : ",press.getText() + "");
@@ -190,21 +227,33 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
                 afficherTick();
                 break;
             case R.id.color:
-                myCanvas.setPenColor(getColor());
+
+                Integer newColor = getColor();
+
+                if(newColor == Color.BLACK){
+                    myCanvas.setPenColor(Color.WHITE);
+                    kyriakos = Color.WHITE;}
+                else{
+                    myCanvas.setPenColor(newColor);
+                    kyriakos = newColor;}
+
+
+
                 ctrl.msgColor();
                 Log.d("Button Pressed : ", press.getText() + "");
                 break;
             case R.id.valider:
                 ctrl.msgValider(formeDemande +"," + myCanvas.getTicks());
+               // startShare();
                 Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
-                myCanvas.reset(getColorEffacer());
                 break;
             case R.id.tutoriel:
                 ctrl.msgTutoriel();
                 LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customView = inflater.inflate(R.layout.custom_layout,null);
+
 
                 mPopUp = new PopupWindow(
                         customView,
@@ -234,12 +283,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
                 if (b){
                     String txt = ("Juste");
                     score.setText(txt);
-                    score.setBackgroundColor(Color.GREEN);
+                    leftBord.setBackgroundColor(Color.GREEN);
                 }
                 else {
                     String txt = ("Faux");
                     score.setText(txt);
-                    score.setBackgroundColor(Color.RED);
+                    rightBord.setBackgroundColor(Color.RED);
+
 
                 }
             }
@@ -252,6 +302,25 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
         myCanvas.getCanvas().drawLines(myCanvas.getCoord(),myCanvas.getmPaint());
     }
 
+
+    public void startShare(){
+        Bitmap bitmap = viewToBitmap(myCanvas,myCanvas.getWidth(),myCanvas.getHeight());
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/png");
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(PNG,100,byteArrayOutputStream);
+        newImage = new File(Environment.getExternalStorageDirectory()+File.separator+"Image.png");
+        try {
+            newImage.createNewFile();
+            FileOutputStream fileOutputStream = new FileOutputStream(newImage);
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+        }
+        catch (IOException e){
+            e.printStackTrace();
+
+        }
+
+    }
  }
 
 

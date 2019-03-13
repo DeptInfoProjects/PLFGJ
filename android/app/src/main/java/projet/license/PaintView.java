@@ -38,6 +38,7 @@ public class PaintView extends View implements View.OnTouchListener {
 
     private void init() {
         this.mDotSize = defaultDot;
+        this.setBackgroundColor(Color.BLACK);
         this.mPenColor = defaultColor;
         this.mPaths = new ArrayList<Path>();
         this.mPaints = new ArrayList<Paint>();
@@ -47,6 +48,7 @@ public class PaintView extends View implements View.OnTouchListener {
         this.countTicks = 0;
         this.setOnTouchListener(this);
         this.coord = new float[]{};
+
 
     }
     public int getTicks(){

@@ -1,4 +1,5 @@
 package serveur;
+
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -7,11 +8,19 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import commun.Coup;
 import commun.Identification;
+import commun.shapedetector;
+import org.opencv.core.*;
+import org.opencv.core.Point;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 
+import java.awt.*;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Serveur {
     SocketIOServer serveur;
@@ -19,6 +28,7 @@ public class Serveur {
     private int àTrouvé = 42;
     Identification leClient ;
     ArrayList<Coup> coups = new ArrayList<>();
+
 
 
     public Serveur(Configuration config)  {
@@ -124,7 +134,7 @@ public class Serveur {
 
 
         }
-    private void démarrer() {
+    private void démarrer() throws IOException {
 
         serveur.start();
 
@@ -137,7 +147,6 @@ public class Serveur {
                 System.err.println("erreur dans l'attente");
             }
         }
-
         System.out.println("Une connexion est arrivée, on arrête");
         serveur.stop();
 
@@ -174,7 +183,7 @@ public class Serveur {
         return false;
     }
 
-    public static final void main(String []args) {
+    public static final void main(String []args) throws IOException {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -182,8 +191,8 @@ public class Serveur {
         }
         Configuration config = new Configuration();
         //fac
-        //config.setHostname("10.1.124.22");
-        config.setHostname("172.20.10.2");
+        config.setHostname("10.1.124.22");
+        //config.setHostname("172.20.10.2");
         //spiti
         //config.setHostname("192.168.0.18");
         //maison sabri
@@ -197,7 +206,57 @@ public class Serveur {
 
         System.out.println("fin du main");
 
+
     }
 
 
+
+
+    private List<String> detect(Mat matrix) {
+        List<String> shapeDessiner = new ArrayList<>();
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        //Imgcodecs imgcodecs;
+        //imgcodecs = new Imgcodecs();
+        //String file = "C:/Users/Kyriakos Petrou/Desktop/shape-detection/shape-detection/test.png";
+        //Mat matrix = imgcodecs.imread(img);
+
+        Mat resizematrix = new Mat();
+        Size sz = new Size(matrix.width(), matrix.height());
+        Imgproc.resize(matrix, resizematrix, sz);
+
+        Mat resizeColor = new Mat();
+        Imgproc.cvtColor(resizematrix, resizeColor, Imgproc.COLOR_BGR2GRAY);
+
+        Mat resizeGauss = new Mat();
+        Size sz2 = new Size(5, 5);
+        Imgproc.GaussianBlur(resizeColor, resizeGauss, sz2, 0);
+        Mat resizeThresh = new Mat();
+
+        Imgproc.threshold(resizeGauss, resizeThresh, 60, 255, Imgproc.RETR_EXTERNAL);
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(resizeThresh, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        shapedetector sd = new shapedetector();
+        for (MatOfPoint c : contours) {
+            Moments M = Imgproc.moments(c);
+            int cX = (int) (M.m10 / M.m00);
+            int cY = (int) (M.m01 / M.m00);
+            Point sz3 = new Point(cX, cY);
+            String shape = sd.detect(c);
+            Scalar scalar = new Scalar(0, 255, 0);
+            Scalar scalar2 = new Scalar(125, 125, 125);
+            System.out.println(shape);
+            Imgproc.drawContours(matrix, contours, -1, scalar, 2);
+            Imgproc.putText(matrix, shape, sz3, Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, scalar2, 2);
+            Image imageRes = sd.Mat2BufferedImage(matrix);
+            sd.displayImage(imageRes);
+            shapeDessiner.add(shape);
+
+        }
+        return shapeDessiner;
+    }
 }
+
+
+
+
+

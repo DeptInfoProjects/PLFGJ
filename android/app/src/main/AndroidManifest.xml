@@ -12,17 +12,28 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="PLFGJ DRAW"
+        android:label="PLFGJ APP"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
-            android:name="projet.license.MainActivity">
+            android:name="projet.license.MainHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="projet.license.DrawDetectorActivity">
+        </activity>
+
+        <activity
+            android:name="projet.license.Game2Activity">
+        </activity>
+
     </application>
 
 </manifest>

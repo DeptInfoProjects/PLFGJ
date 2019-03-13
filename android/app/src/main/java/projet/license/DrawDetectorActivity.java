@@ -26,18 +26,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import commun.ListDemande;
 
 import static android.graphics.Bitmap.CompressFormat.PNG;
-import static android.graphics.Color.GREEN;
 import static android.graphics.Color.MAGENTA;
 
 
-public class MainActivity extends Activity implements View.OnClickListener, Affichage{
+public class DrawDetectorActivity extends Activity implements View.OnClickListener, Affichage{
 
     private Button effacer, couleur, btnJouer, start, tutoriel;
     private TextView titre, fdem, randform, click, score,rightBord,leftBord;
@@ -59,7 +56,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_drawdetector);
         this.init();
 
 
@@ -103,6 +100,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Affi
         btnJouer.setOnClickListener(this);
         tutoriel.setOnClickListener(this);
 
+    }
+
+    public void back_home(View v){
+        finish();    // retourner page home
     }
 
     private void changeTheme(int choix) {

@@ -44,8 +44,7 @@ Date prevu :    07 / 03 / 2019
 ### Livraison 5 :
 Date prevu :    14 / 03 / 2019
 
-* Mise en place d'un système de score / points pour chaque défi de dessin
-* Mise en place d'un systeme qui perfectionne le tracé d'un segment
+* 2eme exercice avec implémentation de reconnaissance de forme
 * Test sur les tâches réalisées
 
 ### Livraison 6 :

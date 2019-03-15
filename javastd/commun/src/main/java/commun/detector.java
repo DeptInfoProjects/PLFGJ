@@ -1,5 +1,7 @@
 package commun;
 
+
+
 import org.opencv.core.Point;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -10,51 +12,65 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.opencv.imgproc.Imgproc.boundingRect;
+
 
 public class detector {
+    public detector(){}
+
+    public String detect(MatOfPoint img) {
+
+        String shape = "Unindentified";
+
+        MatOfPoint2f img2f = new MatOfPoint2f();
+        MatOfPoint approxImg = new MatOfPoint();
+        MatOfPoint2f approxImg2f = new MatOfPoint2f();
+
+        img.convertTo(img2f, CvType.CV_32FC2);
+
+        Imgproc.approxPolyDP(img2f, approxImg2f, 4, true);
+
+        approxImg2f.convertTo(approxImg, CvType.CV_32S);
+        System.out.println(approxImg.size().height);
+        switch ((int) approxImg.size().height) {
+
+            case 0:
+                shape = "Not a Shape";
+                break;
+            case 1:
+                shape = "Point";
+                break;
+            case 2:
+                shape = "Line";
+                break;
+            case 3:
+                shape = "Triangle";
+                break;
+            case 4:
+                Rect rect = boundingRect(approxImg);
+                float ar =(float) rect.width / (float)rect.height;
+                //Un carrÃ© possÃ¨de un ratio w/h d'eniron 1.0
+                //Dans le cas contraire on suppose qu'il s'agit d'un rectangle
+                if (ar >= 0.95 && ar <= 1.05) {
+                    System.out.println(ar);
+                    shape = "Square";
+                } else {
+                    shape = "Rectangle";
+                }
+                break;
+            case 5:
+                shape = "Pentagon";
+                break;
+            case 6:
+                shape = "Hexagone";
+                break;
+            default:
+                shape = "Circle";
+                break;
 
 
-//    private List<String> detect(Mat matrix) {
-//        List<String> shapeDessiner = new ArrayList<>();
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-//        //Imgcodecs imgcodecs;
-//        //imgcodecs = new Imgcodecs();
-//        //String file = "C:/Users/Kyriakos Petrou/Desktop/shape-detection/shape-detection/test.png";
-//        //Mat matrix = imgcodecs.imread(img);
-//
-//        Mat resizematrix = new Mat();
-//        Size sz = new Size(matrix.width(), matrix.height());
-//        Imgproc.resize(matrix, resizematrix, sz);
-//
-//        Mat resizeColor = new Mat();
-//        Imgproc.cvtColor(resizematrix, resizeColor, Imgproc.COLOR_BGR2GRAY);
-//
-//        Mat resizeGauss = new Mat();
-//        Size sz2 = new Size(5, 5);
-//        Imgproc.GaussianBlur(resizeColor, resizeGauss, sz2, 0);
-//        Mat resizeThresh = new Mat();
-//
-//        Imgproc.threshold(resizeGauss, resizeThresh, 60, 255, Imgproc.RETR_EXTERNAL);
-//        List<MatOfPoint> contours = new ArrayList<>();
-//        Imgproc.findContours(resizeThresh, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-//        shapedetector sd = new shapedetector();
-//        for (MatOfPoint c : contours) {
-//            Moments M = Imgproc.moments(c);
-//            int cX = (int) (M.m10 / M.m00);
-//            int cY = (int) (M.m01 / M.m00);
-//            Point sz3 = new Point(cX, cY);
-//            String shape = sd.detect(c);
-//            Scalar scalar = new Scalar(0, 255, 0);
-//            Scalar scalar2 = new Scalar(125, 125, 125);
-//            System.out.println(shape);
-//            Imgproc.drawContours(matrix, contours, -1, scalar, 2);
-//            Imgproc.putText(matrix, shape, sz3, Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, scalar2, 2);
-//            Image imageRes = sd.Mat2BufferedImage(matrix);
-//            sd.displayImage(imageRes);
-//            shapeDessiner.add(shape);
-//
-//        }
-//        return shapeDessiner;
-//    }
-//
+        }
+        return shape;
+    }
+
 }

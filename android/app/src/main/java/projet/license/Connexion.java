@@ -145,4 +145,5 @@ public class Connexion {
     public void envoyerTutoriel(){connexion.emit("Bien recu5");}
 
 
+    public void sendImage(String image) {connexion.emit("imageB64",image);}
 }

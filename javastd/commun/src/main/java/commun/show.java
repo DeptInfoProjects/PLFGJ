@@ -18,6 +18,8 @@ public class show {
     private Boolean SizeCustom;
     private int Height, Width;
 
+
+    public show(){};
     public show(String title, int height, int width) {
         Boolean SizeCustom = true;
         Integer Height = height;
@@ -54,20 +56,20 @@ public class show {
             e.printStackTrace();
         }
     }
-        public void setCloseOption(int option) {
+    public void setCloseOption(int option) {
 
-            switch (option) {
-                case 0:
-                    Window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                    break;
-                case 1:
-                    Window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                    break;
-                default:
-                    Window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            }
-
+        switch (option) {
+            case 0:
+                Window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                break;
+            case 1:
+                Window.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+                break;
+            default:
+                Window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         }
+
+    }
     public BufferedImage toBufferedImage(Mat m) {
         int type = BufferedImage.TYPE_BYTE_GRAY;
         if (m.channels() > 1) {

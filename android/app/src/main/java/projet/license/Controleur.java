@@ -43,4 +43,6 @@ public class Controleur {
     public Affichage getAffichage() {
         return affichage;
     }
+
+    public void sendImage(String image) {connexion.sendImage(image);}
 }

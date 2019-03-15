@@ -61,7 +61,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -210,7 +210,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         Button press = (Button)findViewById(v.getId());
         switch (v.getId()){
             case R.id.effacer:
-                myCanvas.reset(kyriakos);
+                myCanvas.clear();
                 ctrl.msgReset();
                 myCanvas.countTicks = 0;
                 listDemande.setTicks(0);
@@ -228,15 +228,9 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 afficherTick();
                 break;
             case R.id.color:
-
-                Integer newColor = getColor();
-
-                if(newColor == Color.BLACK){
-                    myCanvas.setPenColor(Color.WHITE);
-                    kyriakos = Color.WHITE;}
-                else{
-                    myCanvas.setPenColor(newColor);
-                    kyriakos = newColor;}
+                mRelativeLayout.setBackgroundColor(getColor());
+                myCanvas.setBackgroundColor(Color.BLACK);
+                myCanvas.mPaint.setColor(Color.WHITE);
 
 
 
@@ -245,7 +239,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 break;
             case R.id.valider:
                 ctrl.msgValider(formeDemande +"," + myCanvas.getTicks());
-               // startShare();
+                ctrl.sendImage(myCanvas.encodeBitMap());
                 Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
@@ -298,10 +292,6 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
     }
 
-
-    public void drawlines(){
-        myCanvas.getCanvas().drawLines(myCanvas.getCoord(),myCanvas.getmPaint());
-    }
 
 
     public void startShare(){

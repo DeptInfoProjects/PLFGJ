@@ -1,160 +1,145 @@
 package projet.license;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
 
-
-public class PaintView extends View implements View.OnTouchListener {
-    private final int defaultDot = 10;
-    private final int defaultColor = Color.GRAY;
-    private int mPenColor;
-    private int mDotSize;
-    private float mX,mY,mOldX,mOldY;
-    public int countTicks = 0;
-    private ArrayList<Path> mPaths;
-    private ArrayList<Paint> mPaints;
+public class PaintView extends View {
+    public Bitmap mBitmap;
+    public Canvas mCanvas;
     private Path mPath;
-    private Paint mPaint;
-    private float[] coord;
-    private Canvas canvas;
+    private Paint mBitmapPaint;
+    public Paint   mPaint;
+    public int countTicks = 0;
 
 
+    public PaintView(Context c, AttributeSet attrs) {
+        super(c, attrs);
 
-
-    public PaintView(Context context) {
-        super(context);
-        this.init();
-    }
-
-    private void init() {
-        this.mDotSize = defaultDot;
-        this.setBackgroundColor(Color.BLACK);
-        this.mPenColor = defaultColor;
-        this.mPaths = new ArrayList<Path>();
-        this.mPaints = new ArrayList<Paint>();
-        this.mPath = new Path();
-        this.addPath(false);
-        this.mX = this.mY = this.mOldY = this.mOldX =  (float) 0.0;
-        this.countTicks = 0;
-        this.setOnTouchListener(this);
-        this.coord = new float[]{};
-
-
-    }
-    public int getTicks(){
-        return this.countTicks;
-    }
-
-    public void addPath(boolean fill){
         mPath = new Path();
-        mPaths.add(mPath);
+        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+
         mPaint = new Paint();
-        mPaints.add(mPaint);
-        mPaint.setColor(mPenColor);
-        if (!fill)
-            mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(mDotSize);
-    }
-    protected  void onDraw(Canvas canvas){
-        super.onDraw(canvas);
-        for (int i = 0; i<mPaths.size();i++)
-            canvas.drawPath(mPaths.get(i),mPaints.get(i));
-        canvas.drawPath(mPath,mPaint);
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(0xFF000000);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(9);
+        mPaint.setColor(Color.WHITE);
+        this.setBackgroundColor(Color.BLACK);
     }
 
 
-
-    public void setPenColor(int penColor){
-        this.mPenColor = penColor;
-        this.mPaint.setColor(mPenColor);
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        mCanvas = new Canvas(mBitmap);
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+        canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 
-    public PaintView(Context context, AttributeSet attrs){
-        super(context,attrs);
-        this.init();
+        canvas.drawPath(mPath, mPaint);
+
+
     }
 
-    public PaintView(Context context,AttributeSet attrs,int defSystelAttr){
-        super(context,attrs,defSystelAttr);
-        this.init();
+    private float mX, mY;
+    private static final float TOUCH_TOLERANCE = 4;
+
+    private void touch_start(float x, float y) {
+        mPath.reset();
+        mPath.moveTo(x, y);
+        mX = x;
+        mY = y;
+    }
+    private void touch_move(float x, float y) {
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
+        if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+            mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
+            mX = x;
+            mY = y;
+        }
+    }
+    private void touch_up() {
+        mPath.lineTo(mX, mY);
+        // commit the path to our offscreen
+        mCanvas.drawPath(mPath, mPaint);
+        // kill this so we don't double draw
+        mPath.reset();
     }
 
-    public void reset(int PenColor) {
-        this.init();
-        this.invalidate();
-        setPenColor(PenColor);
-        this.countTicks = 0;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                touch_start(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                touch_move(x, y);
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+                touch_up();
+                invalidate();
+                break;
+        }
+        return true;
     }
+
+    public Bitmap getBitmap()
+    {
+        //this.measure(100, 100);
+        //this.layout(0, 0, 100, 100);
+        this.setDrawingCacheEnabled(true);
+        this.buildDrawingCache();
+        Bitmap bmp = Bitmap.createBitmap(this.getDrawingCache());
+        this.setDrawingCacheEnabled(false);
+
+
+        return bmp;
+    }
+
     public void addTick(){
         this.countTicks = this.countTicks + 1;
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        mX = event.getX();
-        mY = event.getY();
-        Log.d("Touched : "," ("+mX + "," + mY + ")");
-        switch (event.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                this.addPath(true);
-                this.mPath.addCircle(mX,mY,mDotSize/2,Path.Direction.CW);
-                this.addPath(false);
-                this.mPath.moveTo(mX,mY);
-                this.addTick();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                this.mPath.lineTo(mX,mY);
 
-                break;
-            case MotionEvent.ACTION_UP:
-                this.addPath(true);
-                if (mOldX == mX && mOldY == mY)
-                    this.mPath.addCircle(mX,mY,mDotSize/2,Path.Direction.CW);
-
-                break;
-        }
-        this.addElement(coord, mX);
-        this.addElement(coord, mY);
-        this.invalidate();
-        mOldX = mX;
-        mOldY = mY;
-        return true;
+    public void clear(){
+        mBitmap.eraseColor(Color.BLACK);
+        invalidate();
+        System.gc();
 
     }
-
-    public float[] getCoord(){
-        return this.coord;
+    public String encodeBitMap(){
+        Bitmap bmp = this.mBitmap;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG,100,stream);
+        byte[] byteArray = stream.toByteArray();
+        String encoded = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        return encoded;
     }
 
-    private float[] addElement(float[] a, float e) {
-        a  = Arrays.copyOf(a, a.length + 1);
-        a[a.length - 1] = e;
-        return a;
-    }
-
-    public void drawline(Canvas canvas){
-        for(int i = 0; i < coord.length - 4; i ++){
-
-            canvas.drawLine(coord[i],coord[i+1],coord[i+2],coord[i+3],this.mPaint);
-        }
-    }
-    public Canvas getCanvas(){
-        return this.canvas;
-    }
-
-    public Paint getmPaint(){
-        return this.mPaint;
+    public Integer getTicks(){
+        return this.countTicks;
     }
 
 

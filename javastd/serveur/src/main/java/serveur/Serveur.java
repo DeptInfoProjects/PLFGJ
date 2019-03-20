@@ -8,17 +8,21 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import commun.Identification;
 import commun.shapedetector;
-import org.opencv.core.Core;
+
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class Serveur {
 
     SocketIOServer serveur;
     final Object attenteConnexion = new Object();
-
+    private List<String> time_detector_demander = new ArrayList<>();
+    private List<String> time_detector_dessiner = new ArrayList<>();
     Identification client;
+    private Integer compter = 0;
 
 
     public Serveur(Configuration config)  {
@@ -38,6 +42,7 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, String forme2, AckRequest ackRequest) throws Exception {
                 String[] list = forme2.split(",");
+                System.out.println(list);
                 boolean verif = verifier(list);
                 if ( verif ) {
                     System.out.println("---------------------------------------------------------------");
@@ -109,12 +114,37 @@ public class Serveur {
                 fileOut.write(imgbytes);
                 fileOut.flush();
                 fileOut.close();
-
-                //Mat imgMat = Imgcodecs.imdecode(new MatOfByte(imgbytes), Imgcodecs.CV_LOAD_IMAGE_UNCHANGED);
-
                 shapedetector sd = new shapedetector();
-
                 System.out.println(sd.detectShapes("shapes.png"));
+            }
+        });
+        serveur.addEventListener("timeImage", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                String[] list = s.split(",");
+                byte[] imgbytes;
+
+                //System.out.println("s de talle : "+s.length());
+                imgbytes = Base64.getMimeDecoder().decode(list[1]);
+
+                final File file = new File("shapes.png");
+                final FileOutputStream fileOut = new FileOutputStream(file);
+                fileOut.write(imgbytes);
+                fileOut.flush();
+                fileOut.close();
+                shapedetector sd = new shapedetector();
+                time_detector_demander.add(list[0]);
+                time_detector_dessiner.add(sd.detectShapes("shapes.png").get(0));
+                compter ++;
+                System.out.println(compter + " : Forme Demandée : " + time_detector_demander);
+                System.out.println("  : Forme Dessinée : " + time_detector_dessiner);
+            }
+        });
+
+        serveur.addEventListener("endTimeGame", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
+                endTimeGame(socketIOClient);
             }
         });
 
@@ -140,12 +170,23 @@ public class Serveur {
 
     }
 
-
-
+    private void endTimeGame(SocketIOClient socketIOClient){
+        int score = 0;
+        int tendace = 0;
+        for(int i = 0 ; i < time_detector_demander.size(); i++){
+            if (time_detector_demander.get(i).equals(time_detector_dessiner.get(i))){
+                score ++;
+            }
+            tendace ++;
+        }
+        socketIOClient.sendEvent("scoreTimeGame",score,tendace);
+    }
 
     private void formeValide(SocketIOClient socketIOClient, boolean verif) {
         socketIOClient.sendEvent("forme_valide", verif);
     }
+
+
 
 
 
@@ -175,14 +216,15 @@ public class Serveur {
         nu.pattern.OpenCV.loadShared();
         Configuration config = new Configuration();
         //fac
+        //config.setHostname("10.1.124.22");
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
-        config.setHostname("192.168.0.18");
+        //config.setHostname("192.168.0.18");
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono
-        //config.setHostname("192.168.43.60");
+        config.setHostname("192.168.43.60");
         config.setPort(10101);
 
 

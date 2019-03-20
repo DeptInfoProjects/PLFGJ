@@ -7,7 +7,6 @@ import commun.ListDemande;
 
 public class Controleur {
     Connexion connexion;
-    int dernierCoup = -1;
     final Identification moi = new Identification("Moi sur Android", 1000);
     private Affichage affichage;
 
@@ -36,6 +35,10 @@ public class Controleur {
         getAffichage().majScor(verif);
     }
 
+    public void timeGameScor(Integer scor,Integer tentative) {
+        getAffichage().timeGameScor(scor,tentative);
+    }
+
     public void setAffichage(Affichage affichage) {
         this.affichage = affichage;
     }
@@ -44,5 +47,11 @@ public class Controleur {
         return affichage;
     }
 
+
+    public void timeDetectorValider(String image) {connexion.timeImage(image);}
+
     public void sendImage(String image) {connexion.sendImage(image);}
+
+    public void endTimeGame() {connexion.endTimeGame();
+    }
 }

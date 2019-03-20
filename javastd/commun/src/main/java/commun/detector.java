@@ -49,8 +49,6 @@ public class detector {
             case 4:
                 Rect rect = boundingRect(approxImg);
                 float ar =(float) rect.width / (float)rect.height;
-                //Un carrÃ© possÃ¨de un ratio w/h d'eniron 1.0
-                //Dans le cas contraire on suppose qu'il s'agit d'un rectangle
                 if (ar >= 0.95 && ar <= 1.05) {
                     System.out.println(ar);
                     shape = "Square";

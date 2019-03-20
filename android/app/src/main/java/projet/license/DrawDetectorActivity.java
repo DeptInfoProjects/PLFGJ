@@ -61,7 +61,9 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
+        //tilefono
+        Connexion connexion = new Connexion("http://192.168.43.60:10101",ctrl);
+        //Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -77,7 +79,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         effacer = findViewById(R.id.effacer);
         couleur = findViewById(R.id.color);
         btnJouer = findViewById(R.id.valider);
-        start = findViewById(R.id.start);
+        start = findViewById(R.id.start1);
         titre = findViewById(R.id.textView6);
         fdem = findViewById(R.id.textView4);
         randform = findViewById(R.id.textView3);
@@ -149,23 +151,21 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         switch (this.i) {
             case 0:
                 this.i = this.i + 1;
-                changeTheme(Color.BLACK);
-                return Color.BLACK;
+                return Color.GREEN;
             case 1:
                 this.i = this.i + 1;
-                changeTheme(Color.LTGRAY);
                 return Color.LTGRAY;
             case 2:
                 this.i = this.i + 1;
-                changeTheme(Color.MAGENTA);
                 return MAGENTA;
             case 3:
                 this.i = this.i + 1;
-                changeTheme(Color.YELLOW);
                 return Color.YELLOW;
             case 4:
+                this.i = this.i + 1;
+                return Color.RED;
+                case 5:
                 this.i = 0;
-                changeTheme(Color.BLUE);
                 return Color.BLUE;
         }
         return Color.BLUE;
@@ -217,10 +217,9 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 afficherTick();
                 Log.d("Button Pressed : ",press.getText() + "");
                 break;
-            case R.id.start:
+            case R.id.start1:
                 leftBord.setBackgroundColor(mRelativeLayout.getSolidColor());
                 rightBord.setBackgroundColor(mRelativeLayout.getSolidColor());
-                //myCanvas.reset(getColorEffacer());
                 newForme();
                 ctrl.msgStart();
                 Log.d("Button Pressed : ",press.getText() + "");
@@ -228,18 +227,13 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 afficherTick();
                 break;
             case R.id.color:
-                mRelativeLayout.setBackgroundColor(getColor());
                 myCanvas.setBackgroundColor(Color.BLACK);
-                myCanvas.mPaint.setColor(Color.WHITE);
-
-
-
+                myCanvas.mPaint.setColor(getColor());
                 ctrl.msgColor();
                 Log.d("Button Pressed : ", press.getText() + "");
                 break;
             case R.id.valider:
                 ctrl.msgValider(formeDemande +"," + myCanvas.getTicks());
-                ctrl.sendImage(myCanvas.encodeBitMap());
                 Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
@@ -271,6 +265,15 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
     }
 
 
+    public void timeGameScor(Integer score,Integer tentative){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
     public void majScor(final boolean b){
         runOnUiThread(new Runnable() {
             @Override
@@ -289,27 +292,6 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 }
             }
         });
-
-    }
-
-
-
-    public void startShare(){
-        Bitmap bitmap = viewToBitmap(myCanvas,myCanvas.getWidth(),myCanvas.getHeight());
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/png");
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(PNG,100,byteArrayOutputStream);
-        newImage = new File(Environment.getExternalStorageDirectory()+File.separator+"Image.png");
-        try {
-            newImage.createNewFile();
-            FileOutputStream fileOutputStream = new FileOutputStream(newImage);
-            fileOutputStream.write(byteArrayOutputStream.toByteArray());
-        }
-        catch (IOException e){
-            e.printStackTrace();
-
-        }
 
     }
  }

@@ -36,56 +36,18 @@ public class Connexion {
                 @Override
                 public void call(Object... objects) {
                     System.out.println(" on est connecté ! et on s'identifie ");
-
-                    // on s'identifie
                     controleur.aprèsConnexion();
 
                 }
             });
-
             connexion.on("disconnect", new Emitter.Listener() {
                 @Override
                 public void call(Object... objects) {
                     System.out.println(" !! on est déconnecté !! ");
                     connexion.disconnect();
                     connexion.close();
-                    //controleur.finPartie();
-
                 }
             });
-
-
-            // on recoit une question
-            connexion.on("question", new Emitter.Listener() {
-                @Override
-                public void call(Object... objects) {
-                    System.out.println("on a reçu une question avec "+objects.length+" paramètre(s) ");
-                    if (objects.length > 0 ) {
-                        System.out.println("la réponse précédente était : "+objects[0]);
-
-                        boolean plusGrand = (Boolean)objects[0];
-                        // false, c'est plus petit... !! erreur... dans les commit d'avant
-
-                        // conversion local en ArrayList, juste pour montrer
-                        JSONArray tab = (JSONArray) objects[1];
-                        ArrayList<Coup> coups = new ArrayList<Coup>();
-                        for(int i = 0; i < tab.length(); i++) {
-
-                            try {
-                                coups.add(new Coup(tab.getJSONObject(i).getInt("coup"), tab.getJSONObject(i).getBoolean("plusGrand")));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-
-
-
-                    }
-                }
-            });
-
-
             connexion.on("forme_valide", new Emitter.Listener() {
                 @Override
                 public void call(Object... objects) {
@@ -100,8 +62,16 @@ public class Connexion {
                             System.out.println("le nombre de points est incorrecte");
                             ctrl.majScor(verif);
                         }
-
                     }
+                }
+            });
+            connexion.on("scoreTimeGame", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Integer score =(Integer) args[0];
+                    Integer tentative = (Integer) args[1];
+                    ctrl.timeGameScor(score,tentative );
+
                 }
             });
 
@@ -146,4 +116,8 @@ public class Connexion {
 
 
     public void sendImage(String image) {connexion.emit("imageB64",image);}
+    public void timeImage(String image) {connexion.emit("timeImage",image);}
+
+    public void endTimeGame() {connexion.emit("endTimeGame");
+    }
 }

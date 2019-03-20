@@ -51,7 +51,6 @@ public class PaintView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-
         canvas.drawPath(mPath, mPaint);
 
 
@@ -91,6 +90,7 @@ public class PaintView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touch_start(x, y);
+                this.addTick();
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -107,8 +107,6 @@ public class PaintView extends View {
 
     public Bitmap getBitmap()
     {
-        //this.measure(100, 100);
-        //this.layout(0, 0, 100, 100);
         this.setDrawingCacheEnabled(true);
         this.buildDrawingCache();
         Bitmap bmp = Bitmap.createBitmap(this.getDrawingCache());

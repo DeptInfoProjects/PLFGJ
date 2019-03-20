@@ -4,11 +4,10 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     tools:context=".DrawDetectorActivity">
 
     <Button
-        android:id="@+id/start"
+        android:id="@+id/start1"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView3"
@@ -17,6 +16,7 @@
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/valider"
         android:text="START"
+        android:textColor="?attr/colorError"
         android:textStyle="bold"
         tools:ignore="NotSibling" />
 
@@ -31,6 +31,7 @@
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/color"
         android:text="Valider"
+        android:textColor="?attr/colorError"
         android:textStyle="bold" />
 
 
@@ -43,6 +44,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="3dp"
         android:text="EFFACER"
+        android:textColor="?attr/colorError"
         android:textStyle="bold" />
 
     <Button
@@ -54,6 +56,7 @@
         android:layout_marginTop="3dp"
         android:layout_toEndOf="@+id/effacer"
         android:text="COLOR"
+        android:textColor="?attr/colorError"
         android:textStyle="bold" />
 
     <TextView
@@ -66,6 +69,7 @@
 
         android:layout_marginTop="1dp"
         android:text="Dessiner un : "
+        android:textColor="?attr/colorError"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -81,6 +85,7 @@
         android:layout_toEndOf="@+id/textView4"
         android:text="  Press start"
         android:textAlignment="center"
+        android:textColor="?attr/colorError"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -90,6 +95,7 @@
         android:layout_height="64dp"
         android:text="@string/app_name"
         android:textAlignment="center"
+        android:textColor="?attr/colorError"
         android:textSize="36sp"
         android:textStyle="bold" />
 
@@ -100,6 +106,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:text="HOW TO PLAY"
+        android:textColor="?attr/colorError"
         android:textStyle="bold" />
 
     <TextView
@@ -112,6 +119,7 @@
         android:layout_marginBottom="0dp"
         android:text=" "
         android:textAlignment="center"
+        android:textColor="?attr/colorError"
         android:textSize="30sp"
         android:textStyle="bold"
         tools:text="Score" />
@@ -164,7 +172,7 @@
         android:layout_width="40dp"
         android:layout_height="523dp"
         android:layout_above="@+id/score"
-        android:layout_below="@+id/start"
+        android:layout_below="@+id/start1"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"

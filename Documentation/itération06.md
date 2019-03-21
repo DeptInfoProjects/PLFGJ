@@ -8,6 +8,7 @@ A la fin du temps imparti, une note correspondant aux nombres de formes réussis
 
 ### Objectif de l'itération à venir :
 3ème jeu "RTO" : Pierre-feuille-ciseau avec des formes géométriques.
+Mise en place d'un score pour le jeu TimeDetector.
 
 ### Bilan sur les test :
 Nous avons fait les tests.

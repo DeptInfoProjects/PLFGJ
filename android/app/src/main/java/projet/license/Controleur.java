@@ -40,7 +40,6 @@ public class Controleur {
 
     public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
         getAffichage().listTimeGame(listFormeDem,listFormeRec);
-
     }
 
     public void setAffichage(Affichage affichage) {
@@ -57,8 +56,5 @@ public class Controleur {
     public void sendImage(String image) {connexion.sendImage(image);}
 
     public void endTimeGame() {connexion.endTimeGame(); }
-
     public  void listTimeGame(){connexion.listResTimeGame();}
-
-
 }

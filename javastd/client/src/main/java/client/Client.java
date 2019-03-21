@@ -1,18 +1,14 @@
 package client;
 
-import commun.Coup;
 import commun.Identification;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 
 public class Client {
 
@@ -55,48 +51,6 @@ public class Client {
                     }
                 }
             });
-
-
-            // on recoit une question
-            connexion.on("question", new Emitter.Listener() {
-                @Override
-                public void call(Object... objects) {
-                    int pas = 1;
-                    System.out.println("on a reçu une question avec "+objects.length+" paramètre(s) ");
-                    if (objects.length > 0 ) {
-                        System.out.println("la réponse précédente était : "+objects[0]);
-
-                        boolean plusGrand = (Boolean)objects[0];
-                        // false, c'est plus petit... !! erreur... dans les commit d'avant
-
-                            if (plusGrand)  pas=-1;
-                            else pas=+1;
-
-
-                        System.out.println(objects[1]);
-
-                        // conversion local en ArrayList, juste pour montrer
-                        JSONArray tab = (JSONArray) objects[1];
-                        ArrayList<Coup> coups = new ArrayList<Coup>();
-                        for(int i = 0; i < tab.length(); i++) {
-
-                            try {
-                                coups.add(new Coup(tab.getJSONObject(i).getInt("coup"), tab.getJSONObject(i).getBoolean("plusGrand")));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        System.out.println(coups);
-
-                    }
-                    propositionCourante += pas;
-                    System.out.println("on répond "+propositionCourante);
-                    connexion.emit("réponse",  propositionCourante);
-                }
-            });
-
-
 
         } catch (URISyntaxException e) {
             e.printStackTrace();

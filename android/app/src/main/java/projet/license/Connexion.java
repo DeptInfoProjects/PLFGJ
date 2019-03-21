@@ -3,26 +3,23 @@ package projet.license;
 
 
 import android.util.Log;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import commun.Coup;
 import commun.Identification;
-import commun.ListDemande;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
 public class Connexion {
 
-    private final Controleur controleur;
+    private  Controleur controleur;
     Socket connexion;
+
+    public Connexion(){}
 
     public Connexion(String urlServeur, final Controleur ctrl) {
         this.controleur = ctrl;
@@ -75,14 +72,17 @@ public class Connexion {
 
                 }
             });
-
             connexion.on("listResTimeGame", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
-                    List<String>  listFormeDem = new ArrayList<>();
-                    List<String>  listFormeRec = new ArrayList<>();
-                    listFormeDem = (List<String>) args[0] ;
-                    listFormeRec = (List<String>) args[1] ;
+
+                    List<String> listFormeDem = (List<String>) args[0] ;
+                    List<String> listFormeRec = (List<String>) args[1] ;
+                    for(String ele : listFormeDem){
+                        System.out.println(ele);
+                    }
+                    for(String ele : listFormeRec)
+                        System.out.println(ele);
                     ctrl.listTimeGame(listFormeDem,listFormeRec);
 
 
@@ -99,10 +99,12 @@ public class Connexion {
 
 
 
-    public void seConnecter() {
+    public boolean seConnecter() {
         // on se connecte
         Log.e("debug", "essaie de se connecter");
         connexion.connect();
+        return true;
+
 
     }
 
@@ -118,12 +120,12 @@ public class Connexion {
         connexion.emit("identification", pieceJointe);
     }
     public void envoyerStart() {
-        connexion.emit("Bien recu2" );
+        connexion.emit("btnStart" );
     }
     public void envoyerReset() {
-        connexion.emit("Bien recu3" );
+        connexion.emit("btnEffacer" );
     }
-    public void envoyerColor() { connexion.emit("Bien recu4" ); }
+    public void envoyerColor() { connexion.emit("btnColor" ); }
     public void envoyerValider(String list) {
         connexion.emit("nbpoints", list);
     }
@@ -133,9 +135,9 @@ public class Connexion {
     public void sendImage(String image) {connexion.emit("imageB64",image);}
     public void timeImage(String image) {connexion.emit("timeImage",image);}
 
-    public void endTimeGame() {connexion.emit("endTimeGame");
-    }
+    public void endTimeGame() {connexion.emit("endTimeGame"); }
+    public void listResTimeGame() {connexion.emit("listResTimeGame"); }
 
-    public void listResTimeGame() {connexion.emit("listResTimeGame");
-    }
+    public void setSocket(Socket socket) {this.connexion = socket; }
+    public void setControleur(Controleur ctrl) {this.controleur = ctrl;}
 }

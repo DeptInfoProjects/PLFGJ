@@ -73,10 +73,8 @@
         android:id="@+id/button_reset"
         android:layout_width="102dp"
         android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="35dp"
-        android:layout_marginEnd="172dp"
+        android:layout_marginStart="10dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/button_start_pause"
         android:text="RESET"
@@ -113,14 +111,12 @@
 
     <Button
         android:id="@+id/history"
-        android:layout_width="162dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
+        android:layout_width="174dp"
+        android:layout_height="38dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="246dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/button_reset"
         android:text="Formes déssinées"
         android:textColor="?attr/colorError"
         android:textSize="14sp"
@@ -129,11 +125,12 @@
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="248dp"
-        android:layout_height="388dp"
+        android:layout_width="307dp"
+        android:layout_height="499dp"
         android:layout_above="@+id/button_reset"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="87dp"
-        android:layout_marginBottom="111dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="32dp"
         android:textColor="@color/colorAccent" />
+
 </RelativeLayout>

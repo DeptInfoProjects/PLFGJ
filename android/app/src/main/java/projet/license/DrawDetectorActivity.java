@@ -45,7 +45,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
     private String formeDemande = "Press start";
     private ListDemande listDemande = new ListDemande();
     private File newImage;
-    private PaintView myCanvas;
+    public PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
     private RelativeLayout mRelativeLayout;
     private PopupWindow mPopUp;
@@ -63,8 +63,8 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
         ctrl = new Controleur(this);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.0.48:10101",ctrl);
-        //Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
+        //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -275,9 +275,14 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         });
     }
 
-    @Override
-    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
 
+    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     public void majScor(final boolean b){

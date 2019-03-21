@@ -6,6 +6,8 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
 import static org.opencv.imgproc.Imgproc.boundingRect;
@@ -20,13 +24,6 @@ import static org.opencv.imgproc.Imgproc.boundingRect;
 public class shapedetector {
 
     public shapedetector(){ }
-
-    /**
-     * Procède à une analyse et à une approximation des contours présents dans l'image passé en paramètre.
-     * ie: un contour avec 3 cotés est une triangle, 4 un rectangle, etc.
-     * @param img Une image sous forme de matrice (opencv.Mat)
-     * @return Identification d'une forme dans l'image (String)
-     */
     public String detectShape(Mat img) {
 
         String shape = "not a shape";
@@ -126,17 +123,17 @@ public class shapedetector {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    /**
-     * A partir d'un fichier passé en paramètre cette méthode fait tourner la méthode DetectShape sur l'ensemble
-     * des contours trouvés dans le ficier image.
-     *
-     * @param file chemin vers le fichier (String)
-     * @return Return un ArrayList<String> contenant l'ensemble des formes trouvés.
-     */
     public ArrayList<String> detectShapes(String file) {
 
-        nu.pattern.OpenCV.loadShared();
-        //String file = "C:/Users/Kyriakos Petrou/Desktop/shape-detection/shape-detection/test.png";
+        try {
+            lodaOpenCV();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Mat matrix = Imgcodecs.imread(file);
 
         //Mat matrix = matrice;
@@ -182,6 +179,96 @@ public class shapedetector {
 
 
         return res;
+    }
+
+
+
+    public  void lodaOpenCV() throws  URISyntaxException, IOException {
+
+        // pour trouver le chemin dans le jar d'opencv
+
+        String os = System.getProperty("os.name").toLowerCase();
+
+        String ext = ".dll";
+
+        if (os.indexOf("windows") >=0)  os = "windows";
+
+        else if (os.indexOf("mac") >= 0) {
+
+            os = "osx";
+
+            ext = ".dylib";
+
+        }
+
+        else {
+
+            os="linux";
+
+            ext = ".so";
+
+        }
+
+
+        // on pourrait mettre la lib dans un dossier temporaire... là, on met à la racine du projet
+
+        File testLib = new File(Core.NATIVE_LIBRARY_NAME + ext);
+
+
+
+        // ne traite que les x86_64
+
+        if (! testLib.exists()) {
+
+
+            // phase 1 : retrouver la lib dans le jar (qui est un zip)
+
+            String libLocation = new File(Core.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+
+
+            ZipFile jarFile = new ZipFile(libLocation);
+
+            String libInJar = "nu/pattern/opencv/"+os+"/x86_64/" + Core.NATIVE_LIBRARY_NAME + ext;
+
+            ZipEntry entry = jarFile.getEntry(libInJar);
+
+
+
+            // phase 2 : recopy
+
+            InputStream in = jarFile.getInputStream(entry);
+
+
+            File fileOut = new File(Core.NATIVE_LIBRARY_NAME+ext);
+
+            OutputStream out = new FileOutputStream(fileOut);
+
+
+
+            byte[] buf = new byte[8192];
+
+            int len;
+
+            while ((len = in.read(buf)) != -1) {
+
+                out.write(buf, 0, len);
+
+            }
+
+
+            // c'est recopié
+
+            in.close();
+
+            out.close();
+
+        }
+
+
+        // chargement de la lib
+
+        System.load(testLib.getAbsolutePath());
+
     }
 
 }

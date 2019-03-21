@@ -3,18 +3,13 @@ package projet.license;
 
 import android.app.Activity;
 
-import android.content.Context;
-import android.os.Build;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.CountDownTimer;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
+
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,13 +19,11 @@ import java.util.Random;
 
 
 public class TimeDetectorActivity extends Activity implements  View.OnClickListener,Affichage{
-    private static final long START_TIME_IN_MILLIS = 10000;
+    private static final long START_TIME_IN_MILLIS = 30000;
 
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
-    private TextView textView5;  /// TEEEEEEEST
-    private Button history ;
     private Button mButtonReset;
     private Button mButtonValider;
     private PaintView myCanvas;
@@ -40,10 +33,9 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     private CountDownTimer mCountDownTimer;
     private TextView formeDemande;
     private String formeCourant;
-    private Context mContext;
-    private PopupWindow mPopUp;
-
-
+    private Button mButtonHistory;
+    private String resultat;
+    private TextView textRes;
 
 
 
@@ -56,28 +48,25 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timedetector);
-        this.init();
 
 
 
         formeDemande = findViewById(R.id.formeDemande);
-        mTextViewCountDown = findViewById(R.id.text_view_countdown);
-        textView5 = findViewById(R.id.textView5);
 
+        mTextViewCountDown = findViewById(R.id.text_view_countdown);
         myCanvas = findViewById(R.id.paintView);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
         mButtonValider = findViewById(R.id.valider);
-
-
-
+        mButtonHistory = findViewById(R.id.history);
+        textRes = findViewById(R.id.textView5);
         ctrl = new Controleur(this);
         //fac
         //Connexion connexion = new Connexion("http://10.1.124.22:10101",ctrl);
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.0.48:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.18:10101",ctrl);
         connexion.seConnecter();
 
 
@@ -115,20 +104,33 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
             }
 
         });
+        mButtonHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(TimeDetectorActivity.this);
+                builder.setCancelable(true);
+                builder.setTitle("Resultat");
+
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //textRes.setText(resultat);
+                        //textRes.setVisibility(View.VISIBLE);
+                    }
+                });
+                builder.show();
+            }
+        });
         updateCountDownText();
     }
-
-    private void init(){
-        mContext = getApplicationContext();
-        history = findViewById(R.id.history);
-
-
-        history.setOnClickListener(this);
-
-
-
-    }
-
 
     private void startTimer() {
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -145,7 +147,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
                 mButtonStartPause.setVisibility(View.INVISIBLE);
                 mButtonReset.setVisibility(View.VISIBLE);
                 ctrl.endTimeGame();
-                ctrl.listTimeGame();
+                //ctrl.listTimeGame();
             }
         }.start();
 
@@ -184,43 +186,21 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
 
     @Override
     public void timeGameScor(Integer score, Integer tentative) {
-        mTextViewCountDown.setText("score : "+ score +" / " +tentative);
+        mTextViewCountDown.setText(score +"/" +tentative);
     }
 
     @Override
     public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
         String res = "Demandé    |  Dessiné    '\n'";
-        for(int i = 0;i < listFormeDem.size();i++){
-            res += listFormeDem.get(i)+"'\t' |  "+  listFormeRec.get(i) + "'\n";
-    }
-    textView5.setText(res);}
+        for (int i = 0; i < listFormeDem.size(); i++) {
+            res += listFormeDem.get(i) + "'\t' |  " + listFormeRec.get(i) + "'\n";
+        }
+        this.resultat = res;
 
+    }
     @Override
     public void onClick(View v) {
-        Button press = (Button)findViewById(v.getId());
-        switch (v.getId()) {
-            case R.id.history:
-                LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View customView = inflater.inflate(R.layout.custom_layout,null);
 
-                mPopUp = new PopupWindow(
-                        customView,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                if(Build.VERSION.SDK_INT>=21){
-                    mPopUp.setElevation(5.0f);
-                }
-                ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
-                closeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mPopUp.dismiss();
-                    }
-                });
-                mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
-                break;
-        }
     }
 
 
@@ -230,6 +210,9 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         formeCourant = formes[x];
         return formeCourant;
     }
+
+
+
 }
 
 

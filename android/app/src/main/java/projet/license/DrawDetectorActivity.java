@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import commun.ListDemande;
@@ -62,7 +63,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
         ctrl = new Controleur(this);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.43.60:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.48:10101",ctrl);
         //Connexion connexion = new Connexion("http://10.1.124.22:10101", ctrl);
         connexion.seConnecter();
 
@@ -272,6 +273,11 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
             }
         });
+    }
+
+    @Override
+    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
+
     }
 
     public void majScor(final boolean b){

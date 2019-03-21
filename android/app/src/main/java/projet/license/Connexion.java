@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import commun.Coup;
 import commun.Identification;
@@ -75,6 +76,20 @@ public class Connexion {
                 }
             });
 
+            connexion.on("listResTimeGame", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    List<String>  listFormeDem = new ArrayList<>();
+                    List<String>  listFormeRec = new ArrayList<>();
+                    listFormeDem = (List<String>) args[0] ;
+                    listFormeRec = (List<String>) args[1] ;
+                    ctrl.listTimeGame(listFormeDem,listFormeRec);
+
+
+
+                }
+            });
+
 
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -119,5 +134,8 @@ public class Connexion {
     public void timeImage(String image) {connexion.emit("timeImage",image);}
 
     public void endTimeGame() {connexion.emit("endTimeGame");
+    }
+
+    public void listResTimeGame() {connexion.emit("listResTimeGame");
     }
 }

@@ -145,7 +145,16 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
                 endTimeGame(socketIOClient);
+
+
             }
+        });
+
+
+        serveur.addEventListener("listResTimeGame", Object.class, new DataListener<Object>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
+                listTimeGame(socketIOClient);}
         });
 
     }
@@ -180,14 +189,18 @@ public class Serveur {
             tendace ++;
         }
         socketIOClient.sendEvent("scoreTimeGame",score,tendace);
+
     }
+
+    private  void listTimeGame(SocketIOClient socketIOClient){
+        socketIOClient.sendEvent("listResTimeGame",time_detector_demander,time_detector_dessiner);
+    }
+
+
 
     private void formeValide(SocketIOClient socketIOClient, boolean verif) {
         socketIOClient.sendEvent("forme_valide", verif);
     }
-
-
-
 
 
 
@@ -216,7 +229,7 @@ public class Serveur {
         nu.pattern.OpenCV.loadShared();
         Configuration config = new Configuration();
         //fac
-        //config.setHostname("10.1.124.22");
+        //config.setHostname("10.1.126.141");
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
@@ -224,7 +237,7 @@ public class Serveur {
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono
-        config.setHostname("192.168.43.60");
+        config.setHostname("192.168.0.48");
         config.setPort(10101);
 
 

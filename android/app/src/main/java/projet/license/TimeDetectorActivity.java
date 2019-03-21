@@ -3,23 +3,34 @@ package projet.license;
 
 import android.app.Activity;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
 
 
 public class TimeDetectorActivity extends Activity implements  View.OnClickListener,Affichage{
-    private static final long START_TIME_IN_MILLIS = 30000;
+    private static final long START_TIME_IN_MILLIS = 10000;
 
 
     private TextView mTextViewCountDown;
     private Button mButtonStartPause;
+    private TextView textView5;  /// TEEEEEEEST
+    private Button history ;
     private Button mButtonReset;
     private Button mButtonValider;
     private PaintView myCanvas;
@@ -29,6 +40,10 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     private CountDownTimer mCountDownTimer;
     private TextView formeDemande;
     private String formeCourant;
+    private Context mContext;
+    private PopupWindow mPopUp;
+
+
 
 
 
@@ -41,15 +56,19 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timedetector);
+        this.init();
 
 
 
         formeDemande = findViewById(R.id.formeDemande);
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
+        textView5 = findViewById(R.id.textView5);
+
         myCanvas = findViewById(R.id.paintView);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
         mButtonValider = findViewById(R.id.valider);
+
 
 
         ctrl = new Controleur(this);
@@ -58,7 +77,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.43.60:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.48:10101",ctrl);
         connexion.seConnecter();
 
 
@@ -99,6 +118,18 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         updateCountDownText();
     }
 
+    private void init(){
+        mContext = getApplicationContext();
+        history = findViewById(R.id.history);
+
+
+        history.setOnClickListener(this);
+
+
+
+    }
+
+
     private void startTimer() {
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
             @Override
@@ -114,6 +145,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
                 mButtonStartPause.setVisibility(View.INVISIBLE);
                 mButtonReset.setVisibility(View.VISIBLE);
                 ctrl.endTimeGame();
+                ctrl.listTimeGame();
             }
         }.start();
 
@@ -152,12 +184,43 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
 
     @Override
     public void timeGameScor(Integer score, Integer tentative) {
-        mTextViewCountDown.setText(score +"/" +tentative);
+        mTextViewCountDown.setText("score : "+ score +" / " +tentative);
     }
 
     @Override
-    public void onClick(View v) {
+    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
+        String res = "Demandé    |  Dessiné    '\n'";
+        for(int i = 0;i < listFormeDem.size();i++){
+            res += listFormeDem.get(i)+"'\t' |  "+  listFormeRec.get(i) + "'\n";
+    }
+    textView5.setText(res);}
 
+    @Override
+    public void onClick(View v) {
+        Button press = (Button)findViewById(v.getId());
+        switch (v.getId()) {
+            case R.id.history:
+                LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+                View customView = inflater.inflate(R.layout.custom_layout,null);
+
+                mPopUp = new PopupWindow(
+                        customView,
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                if(Build.VERSION.SDK_INT>=21){
+                    mPopUp.setElevation(5.0f);
+                }
+                ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPopUp.dismiss();
+                    }
+                });
+                mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
+                break;
+        }
     }
 
 

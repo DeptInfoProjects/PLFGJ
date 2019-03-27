@@ -56,8 +56,9 @@ Date prevu :    21 / 03 / 2019
 
 ### Livraison 7 :
 Date prevu :    28 / 03 / 2019
-*
-*
+* Nouveau jeu RTO : basé sur le principe de "Pierre , feuille , ciseaux"
+* Amélioration de l'interface graphique de l'application
+* Test sur les tâches réalisées
 
 ### Livraison 8 :
 Date prevu :    04 / 04 / 2019

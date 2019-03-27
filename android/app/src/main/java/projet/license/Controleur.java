@@ -7,12 +7,14 @@ import commun.ListDemande;
 
 public class Controleur {
     Connexion connexion;
-    final Identification moi = new Identification("Moi sur Android", 1000);
+    private  Identification moi = new Identification("Moi sur Android");
     private Affichage affichage;
 
     public Controleur(Affichage mainActivity) {
         setAffichage(mainActivity);
     }
+
+
 
     public Connexion getConnexion() {
         return connexion;
@@ -31,6 +33,8 @@ public class Controleur {
     public void msgTutoriel()    {connexion.envoyerTutoriel();}
 
 
+
+    public void setIdentification(String username){moi.setNom(username);}
     public void majScor(boolean verif) {
         getAffichage().majScor(verif);
     }

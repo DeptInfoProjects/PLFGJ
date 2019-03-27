@@ -4,8 +4,8 @@
     android:id="@+id/rl_custom_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp"
-    android:background="@color/colorPrimaryDark"
+    android:padding="16dp"
+    android:background="@drawable/sample"
     >
 
     <ImageButton
@@ -42,6 +42,7 @@ p.e :\n
                                                    Bonne chance
                       "
         android:textAlignment="viewStart"
+        android:textColor="?attr/colorError"
         android:textSize="16sp"
         android:textStyle="bold" />
 </RelativeLayout>

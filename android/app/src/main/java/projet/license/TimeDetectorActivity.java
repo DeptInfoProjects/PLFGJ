@@ -35,7 +35,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     private String formeCourant;
     private Button mButtonHistory;
     private String resultat;
-    private TextView textRes;
+
 
 
 
@@ -59,14 +59,13 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         mButtonReset = findViewById(R.id.button_reset);
         mButtonValider = findViewById(R.id.valider);
         mButtonHistory = findViewById(R.id.history);
-        textRes = findViewById(R.id.textView5);
         ctrl = new Controleur(this);
         //fac
         //Connexion connexion = new Connexion("http://10.1.124.22:10101",ctrl);
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.0.18:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
         connexion.seConnecter();
 
 
@@ -199,10 +198,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
 
     }
     @Override
-    public void onClick(View v) {
-
-    }
-
+    public void onClick(View v) { }
 
     private String randForm(){
         Random rand = new Random();

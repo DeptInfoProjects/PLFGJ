@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sample"
     android:orientation="vertical">
-    android:background="@color/colorPrimaryDark"
+
 
     <TextView
         android:id="@+id/textView"
@@ -13,6 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
+        android:background="@drawable/textviewbordershape"
+
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
@@ -20,61 +23,68 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="?attr/colorError"
+        android:textColor="#FFD700"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/draw_detector"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_width="120dp"
+        android:layout_height="70dp"
         android:layout_below="@+id/textView2"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="0dp"
+
+        android:layout_marginTop="119dp"
+        android:layout_marginEnd="176dp"
         android:layout_marginBottom="0dp"
+        android:background="@drawable/buttonshapecolor"
         android:text="Draw Detector"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/game2"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_width="120dp"
+        android:layout_height="70dp"
         android:layout_below="@+id/draw_detector"
-        android:layout_alignParentStart="true"
+
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="176dp"
+        android:background="@drawable/buttonshapecolor"
         android:text="(Game 2)"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_width="319dp"
+        android:layout_height="63dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="49dp"
         android:layout_marginBottom="0dp"
-        android:text="Select game bellow"
+        android:background="@drawable/textviewbordershape"
+        android:text="Select one of the games below"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/time_detector"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_width="120dp"
+        android:layout_height="70dp"
+
         android:layout_below="@+id/game2"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="176dp"
+        android:background="@drawable/buttonshapecolor"
         android:text="TIME DETECTOR"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 </RelativeLayout>

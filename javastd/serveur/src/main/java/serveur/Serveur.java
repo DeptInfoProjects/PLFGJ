@@ -221,14 +221,13 @@ public class Serveur {
         }
 
 
-        nu.pattern.OpenCV.loadShared();
         Configuration config = new Configuration();
         //fac
         //config.setHostname("10.1.124.22");
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
-        config.setHostname("192.168.0.18");
+        config.setHostname("192.168.0.101");
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono

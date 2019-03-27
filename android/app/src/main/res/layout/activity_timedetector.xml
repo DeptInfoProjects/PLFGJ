@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/sample"
     tools:context=".TimeDetectorActivity">
 
 
@@ -12,9 +13,11 @@
         android:id="@+id/titre"
         android:layout_width="match_parent"
         android:layout_height="63dp"
+        android:background="@drawable/textviewbordershape"
         android:text="TIME DETECTOR"
         android:textAlignment="center"
-        android:textColor="?attr/colorError"
+
+        android:textColor="@color/colorAccent"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -23,11 +26,14 @@
         android:layout_width="102dp"
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
+
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="0dp"
+        android:background="@drawable/buttonshapecolor"
         android:text="START"
-        android:textColor="?attr/colorError"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -38,22 +44,24 @@
         android:layout_below="@+id/titre"
         android:layout_marginTop="0dp"
         android:textAlignment="center"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <projet.license.PaintView
         android:id="@+id/paintView"
-        android:layout_width="314dp"
+        android:layout_width="wrap_content"
         android:layout_height="504dp"
         android:layout_above="@+id/button_reset"
         android:layout_below="@+id/formeDemande"
         android:layout_alignParentStart="true"
+
         android:layout_alignParentEnd="true"
         android:layout_marginStart="51dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="46dp"
-        android:layout_marginBottom="27dp" />
+        android:layout_marginBottom="27dp"
+        android:background="@drawable/textviewbordershape" />
 
     <TextView
         android:id="@+id/text_view_countdown"
@@ -63,9 +71,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="11dp"
         android:layout_marginBottom="54dp"
+        android:background="@drawable/textviewbordershape"
+
         android:text="00.00"
         android:textAlignment="center"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -73,12 +83,15 @@
         android:id="@+id/button_reset"
         android:layout_width="102dp"
         android:layout_height="70dp"
+
         android:layout_alignParentBottom="true"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/button_start_pause"
+        android:background="@drawable/buttonshapecolor"
         android:text="RESET"
-        android:textColor="?attr/colorError"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -91,10 +104,12 @@
         android:layout_marginStart="-1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
         android:layout_toEndOf="@+id/formeDemande"
+        android:background="@drawable/buttonshapecolor"
         android:text="Valider"
-        android:textColor="?attr/colorError"
-        android:textSize="18sp"
+        android:textColor="@color/colorAccent"
+        android:textSize="17sp"
         android:textStyle="bold" />
 
     <Button
@@ -103,6 +118,8 @@
         android:layout_height="42dp"
         android:layout_below="@+id/text_view_countdown"
         android:layout_alignParentBottom="true"
+        android:background="@drawable/buttonshapecolor"
+
         android:layout_marginStart="20dp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="8dp"
@@ -112,25 +129,17 @@
     <Button
         android:id="@+id/history"
         android:layout_width="174dp"
+        android:background="@drawable/buttonshapecolor"
+
         android:layout_height="38dp"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="21dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/button_reset"
         android:text="Formes déssinées"
-        android:textColor="?attr/colorError"
+        android:textColor="@color/colorAccent"
         android:textSize="14sp"
         android:textStyle="bold"
         android:typeface="sans" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="307dp"
-        android:layout_height="499dp"
-        android:layout_above="@+id/button_reset"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="32dp"
-        android:textColor="@color/colorAccent" />
 
 </RelativeLayout>

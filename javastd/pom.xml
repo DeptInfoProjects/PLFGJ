@@ -11,8 +11,6 @@
     <modules>
         <module>commun</module>
         <module>serveur</module>
-        <module>client</module>
-        <module>lanceur</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -86,7 +84,7 @@
         <dependency>
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.2.0-0</version>
+            <version>3.4.2-1</version>
         </dependency>
     </dependencies>
 

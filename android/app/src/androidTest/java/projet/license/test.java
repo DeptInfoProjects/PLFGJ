@@ -56,13 +56,11 @@ public class test {
     @Test
     public void envoyerId() throws JSONException {
         // donnnée en entrée
-        Identification id = new Identification("Essai", 42);
+        Identification id = new Identification("Essai");
 
         // oracle
         JSONObject obj = new JSONObject();
         obj.put("nom", "Essai");
-        obj.put("niveau", 42);
-
 
         // méthode testée
         connexion.envoyerId(id);

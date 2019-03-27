@@ -2,7 +2,7 @@ package projet.license;
 
 import java.util.List;
 
-interface Affichage {
+public interface Affichage {
 
     void majScor(boolean ok);
 

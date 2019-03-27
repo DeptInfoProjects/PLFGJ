@@ -113,7 +113,6 @@ public class Connexion {
         JSONObject pieceJointe = new JSONObject();
         try {
             pieceJointe.put("nom", moi.getNom());
-            pieceJointe.put("niveau", moi.getNiveau());
         } catch (JSONException e) {
             e.printStackTrace();
         }

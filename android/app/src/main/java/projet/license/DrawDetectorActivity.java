@@ -1,37 +1,20 @@
 package projet.license;
 
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-
 import commun.ListDemande;
-
-import static android.graphics.Bitmap.CompressFormat.PNG;
 import static android.graphics.Color.MAGENTA;
 
 
@@ -41,17 +24,15 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
     private TextView titre, fdem, randform, click, score,rightBord,leftBord;
     Controleur ctrl;
     public int i = 0;
-    public static int scor = 0;
     private String formeDemande = "Press start";
     private ListDemande listDemande = new ListDemande();
-    private File newImage;
     public PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
     private RelativeLayout mRelativeLayout;
-    private PopupWindow mPopUp;
     private Context mContext;
     private int textCol;
-    private int kyriakos = Color.WHITE;
+
+
 
 
     @Override
@@ -64,11 +45,13 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         ctrl = new Controleur(this);
         //tilefono
         //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.101:10101", ctrl);
         connexion.seConnecter();
 
 
     }
+
+
     public static Bitmap viewToBitmap(View view,int width,int height){
         Bitmap bitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -86,7 +69,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         randform = findViewById(R.id.textView3);
         tutoriel = findViewById(R.id.tutoriel);
         score = findViewById(R.id.score);
-        click = (TextView) findViewById(R.id.click);
+        click =  findViewById(R.id.click);
         rightBord = findViewById(R.id.rightBord);
         leftBord = findViewById(R.id.leftBord);
 
@@ -116,9 +99,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
             { textCol = Color.DKGRAY;}
         if(choix == Color.BLUE)
         { textCol = Color.WHITE;}
-        //couleur.setBackgroundColor(choix);
         couleur.setTextColor(textCol);
-        //start.setBackgroundColor(choix);
         start.setTextColor(textCol);
         //btnJouer.setBackgroundColor(choix);
         btnJouer.setTextColor(textCol);
@@ -241,29 +222,12 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 break;
             case R.id.tutoriel:
                 ctrl.msgTutoriel();
-                LayoutInflater inflater =(LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View customView = inflater.inflate(R.layout.custom_layout,null);
 
 
-                mPopUp = new PopupWindow(
-                        customView,
-                        LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT
-                );
-                if(Build.VERSION.SDK_INT>=21){
-                    mPopUp.setElevation(5.0f);
-                }
-                ImageButton closeButton = (ImageButton) customView.findViewById(R.id.ib_close);
-                closeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mPopUp.dismiss();
-                    }
-                });
-                mPopUp.showAtLocation(findViewById(R.id.container), Gravity.CENTER,0,0);
-                break;
         }
     }
+
+
 
 
     public void timeGameScor(Integer score,Integer tentative){

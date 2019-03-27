@@ -63,7 +63,7 @@ Date prevu :    28 / 03 / 2019
 ### Livraison 8 :
 Date prevu :    04 / 04 / 2019
 
-* Mise en place d'un systeme inteligent de reconnaissance de forme (parfaite ou approximative )
+* Mode ENTRAÎNEMENT (hors ligne)
 
 
 ### Livraison FINALE :

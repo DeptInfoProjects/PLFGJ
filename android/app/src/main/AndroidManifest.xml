@@ -39,7 +39,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".DrawDetectorActivity" />
-        <activity android:name=".Game2Activity" />
         <activity android:name=".TimeDetectorActivity" />
     </application>
 

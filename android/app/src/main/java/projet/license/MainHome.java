@@ -9,14 +9,14 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainHome extends Activity implements View.OnClickListener{
-    private Button draw_detector, game2 ,time_detector;
+    private Button draw_detector, activity_rto ,time_detector;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_main);
 
 
-        game2 = findViewById(R.id.game2);
-        game2.setOnClickListener(this);
+        activity_rto = findViewById(R.id.rto_activity);
+        activity_rto.setOnClickListener(this);
 
         draw_detector = findViewById(R.id.draw_detector);
         draw_detector.setOnClickListener(this);
@@ -34,8 +34,8 @@ public class MainHome extends Activity implements View.OnClickListener{
                  intent=new Intent(this, DrawDetectorActivity.class);
                 break;
 
-            case R.id.game2:
-                intent = new Intent(this,Game2Activity.class);
+            case R.id.rto_activity:
+                intent = new Intent(this,RtoActivity.class);
                 break;
 
             case R.id.time_detector:

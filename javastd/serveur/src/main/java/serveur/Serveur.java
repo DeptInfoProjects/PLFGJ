@@ -8,12 +8,16 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import commun.Identification;
 import commun.shapedetector;
+import org.opencv.core.Core;
 
 
 import java.io.*;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class Serveur {
 
@@ -118,6 +122,7 @@ public class Serveur {
                 System.out.println(sd.detectShapes("shapes.png"));
             }
         });
+
         serveur.addEventListener("timeImage", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
@@ -132,6 +137,7 @@ public class Serveur {
                 fileOut.write(imgbytes);
                 fileOut.flush();
                 fileOut.close();
+
                 shapedetector sd = new shapedetector();
                 time_detector_demander.add(list[0]);
                 time_detector_dessiner.add(sd.detectShapes("shapes.png").get(0));
@@ -199,7 +205,7 @@ public class Serveur {
 
 
 
-    private boolean verifier(String[] args){
+    public static boolean verifier(String[] args){
         if (args[0].equals("Triangle") && args[1].equals("3")){
             return true;}
         if (args[0].equals("Rond") && args[1].equals("5")){
@@ -213,10 +219,79 @@ public class Serveur {
         return false;
     }
 
+
+
+
+    public static void loadOpenCV() throws IOException, URISyntaxException {
+        // pour trouver le chemin dans le jar d'opencv
+        String os = System.getProperty("os.name").toLowerCase();
+        String ext = ".dll";
+        String prefixe = "lib";
+        if (os.indexOf("windows") >=0)  {
+            os = "windows";
+            prefixe = "";
+        }
+        else if (os.indexOf("mac") >= 0) {
+            os = "osx";
+            ext = ".dylib";
+        }
+        else {
+            os="linux";
+            ext = ".so";
+        }
+
+        // on pourrait mettre la lib dans un dossier temporaire... là, on met à la racine du projet
+        File testLib = new File(prefixe+Core.NATIVE_LIBRARY_NAME + ext);
+
+
+        // ne traite que les x86_64
+        if (! testLib.exists()) {
+
+            // phase 1 : retrouver la lib dans le jar (qui est un zip)
+            String libLocation = new File(Core.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+
+            ZipFile jarFile = new ZipFile(libLocation);
+            String libInJar = "nu/pattern/opencv/"+os+"/x86_64/"+prefixe+ Core.NATIVE_LIBRARY_NAME + ext;
+            ZipEntry entry = jarFile.getEntry(libInJar);
+
+            System.out.println(libInJar);
+
+            // phase 2 : recopy
+            InputStream in = jarFile.getInputStream(entry);
+
+            File fileOut = new File(prefixe+Core.NATIVE_LIBRARY_NAME+ext);
+            OutputStream out = new FileOutputStream(fileOut);
+
+
+            byte[] buf = new byte[8192];
+            int len;
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
+            }
+
+            // c'est recopié
+            in.close();
+            out.close();
+        }
+
+        // chargement de la lib
+        System.load(testLib.getAbsolutePath());
+    }
+
+
+
+
     public static final void main(String []args) throws IOException {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            loadOpenCV();
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
 
@@ -227,7 +302,7 @@ public class Serveur {
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
-        config.setHostname("192.168.0.101");
+        config.setHostname("192.168.0.103");
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono
@@ -244,17 +319,4 @@ public class Serveur {
 
     }
 
-
-
 }
-
-
-
-
-
-
-
-
-
-
-

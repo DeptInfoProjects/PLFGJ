@@ -24,23 +24,18 @@ import static org.opencv.imgproc.Imgproc.boundingRect;
 public class shapedetector {
 
     public shapedetector(){ }
+
     public String detectShape(Mat img) {
 
         String shape = "not a shape";
 
-        MatOfPoint2f img2f = new MatOfPoint2f();
         MatOfPoint approxImg = new MatOfPoint();
-        MatOfPoint2f approxImg2f = new MatOfPoint2f();
+        approxImg = convertUtil(img);
 
-        img.convertTo(img2f, CvType.CV_32FC2);
-
-        Imgproc.approxPolyDP(img2f, approxImg2f, 42, true);
-
-        approxImg2f.convertTo(approxImg, CvType.CV_32S);
 
         switch ((int) approxImg.size().height){
 
-                case  0:
+            case  0:
                 shape = "Not a Shape";
                 break;
             case 1:
@@ -82,12 +77,15 @@ public class shapedetector {
         return shape;
     }
 
+
     /**
      * Transforme une matrice (opencv.Mat) en image
      * @param m Matrice
      * @return une image
      */
-    public BufferedImage Mat2BufferedImage(Mat m) {
+
+
+    public static BufferedImage Mat2BufferedImage(Mat m) {
         // Fastest code
         // output can be assigned either to a BufferedImage or to an Image
 
@@ -106,10 +104,14 @@ public class shapedetector {
         return image;
     }
 
+
+
     /**
      * Permet l'affichage de l'image passé en paramètre (uniquement présent pour procéder à des vérifications)
      * @param img2
      */
+
+
     public void displayImage(Image img2) {
 
         ImageIcon icon=new ImageIcon(img2);
@@ -123,16 +125,10 @@ public class shapedetector {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+
+
     public ArrayList<String> detectShapes(String file) {
 
-        try {
-            lodaOpenCV();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
 
         Mat matrix = Imgcodecs.imread(file);
 
@@ -183,92 +179,21 @@ public class shapedetector {
 
 
 
-    public  void lodaOpenCV() throws  URISyntaxException, IOException {
+    public static MatOfPoint convertUtil(Mat image){
 
-        // pour trouver le chemin dans le jar d'opencv
+        MatOfPoint2f img2f = new MatOfPoint2f();
+        MatOfPoint approxImg = new MatOfPoint();
+        MatOfPoint2f approxImg2f = new MatOfPoint2f();
 
-        String os = System.getProperty("os.name").toLowerCase();
+        image.convertTo(img2f, CvType.CV_32FC2);
 
-        String ext = ".dll";
+        Imgproc.approxPolyDP(img2f, approxImg2f, 42, true);
 
-        if (os.indexOf("windows") >=0)  os = "windows";
+        approxImg2f.convertTo(approxImg, CvType.CV_32S);
 
-        else if (os.indexOf("mac") >= 0) {
-
-            os = "osx";
-
-            ext = ".dylib";
-
-        }
-
-        else {
-
-            os="linux";
-
-            ext = ".so";
-
-        }
-
-
-        // on pourrait mettre la lib dans un dossier temporaire... là, on met à la racine du projet
-
-        File testLib = new File(Core.NATIVE_LIBRARY_NAME + ext);
-
-
-
-        // ne traite que les x86_64
-
-        if (! testLib.exists()) {
-
-
-            // phase 1 : retrouver la lib dans le jar (qui est un zip)
-
-            String libLocation = new File(Core.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-
-
-            ZipFile jarFile = new ZipFile(libLocation);
-
-            String libInJar = "nu/pattern/opencv/"+os+"/x86_64/" + Core.NATIVE_LIBRARY_NAME + ext;
-
-            ZipEntry entry = jarFile.getEntry(libInJar);
-
-
-
-            // phase 2 : recopy
-
-            InputStream in = jarFile.getInputStream(entry);
-
-
-            File fileOut = new File(Core.NATIVE_LIBRARY_NAME+ext);
-
-            OutputStream out = new FileOutputStream(fileOut);
-
-
-
-            byte[] buf = new byte[8192];
-
-            int len;
-
-            while ((len = in.read(buf)) != -1) {
-
-                out.write(buf, 0, len);
-
-            }
-
-
-            // c'est recopié
-
-            in.close();
-
-            out.close();
-
-        }
-
-
-        // chargement de la lib
-
-        System.load(testLib.getAbsolutePath());
+        return approxImg;
 
     }
+
 
 }

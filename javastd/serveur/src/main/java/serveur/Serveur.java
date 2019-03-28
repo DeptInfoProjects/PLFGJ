@@ -163,14 +163,13 @@ public class Serveur {
         });
 
 
-        serveur.addEventListener("rtoImage", String.class, new DataListener<String>() {
+        serveur.addEventListener("rtoCoup", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-                String[] list = s.split(",");
+
                 byte[] imgbytes;
 
-                //System.out.println("s de talle : "+s.length());
-                imgbytes = Base64.getMimeDecoder().decode(list[1]);
+                imgbytes = Base64.getMimeDecoder().decode(s);
 
                 final File file = new File("shapes.png");
                 final FileOutputStream fileOut = new FileOutputStream(file);
@@ -338,7 +337,7 @@ public class Serveur {
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
-        config.setHostname("172.20.10.2");
+        config.setHostname("172.20.10.11");
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono

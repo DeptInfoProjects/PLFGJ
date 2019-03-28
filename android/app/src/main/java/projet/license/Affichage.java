@@ -9,4 +9,6 @@ public interface Affichage {
     void timeGameScor(Integer score, Integer tentative);
 
     void listTimeGame(List<String> listFormeDem, List<String> listFormeRec);
+
+    void rtoGameScore(String coupJoueur, String coupServeur, String resultat);
 }

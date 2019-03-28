@@ -90,6 +90,21 @@ public class Connexion {
                 }
             });
 
+            connexion.on("resultatRto", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+
+                    String coupJoueur = (String) args[0] ;
+                    String coupServeur = (String) args[1] ;
+                    String resultat = (String) args[2] ;
+
+                    ctrl.resultatRto(coupJoueur,coupServeur,resultat);
+
+
+                }
+            });
+
+
 
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -118,6 +133,7 @@ public class Connexion {
         }
         connexion.emit("identification", pieceJointe);
     }
+
     public void envoyerStart() {
         connexion.emit("btnStart" );
     }
@@ -133,6 +149,9 @@ public class Connexion {
 
     public void sendImage(String image) {connexion.emit("imageB64",image);}
     public void timeImage(String image) {connexion.emit("timeImage",image);}
+
+    public void rtoImage(String image) {connexion.emit("rtoCoup",image);}
+
 
     public void endTimeGame() {connexion.emit("endTimeGame"); }
     public void listResTimeGame() {connexion.emit("listResTimeGame"); }

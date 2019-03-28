@@ -65,7 +65,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101",ctrl);
         connexion.seConnecter();
 
 
@@ -92,6 +92,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
                 formeDemande.setText("");
             }
         });
+
         mButtonValider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,6 +198,12 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         this.resultat = res;
 
     }
+
+    @Override
+    public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
+
+    }
+
     @Override
     public void onClick(View v) { }
 

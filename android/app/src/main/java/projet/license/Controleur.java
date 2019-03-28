@@ -61,4 +61,10 @@ public class Controleur {
 
     public void endTimeGame() {connexion.endTimeGame(); }
     public  void listTimeGame(){connexion.listResTimeGame();}
+
+    public void rtoValider(String image) {connexion.rtoImage(image);}
+
+    public void resultatRto(String coupJoueur, String coupServeur, String resultat) {
+        getAffichage().rtoGameScore(coupJoueur, coupServeur, resultat);
+    }
 }

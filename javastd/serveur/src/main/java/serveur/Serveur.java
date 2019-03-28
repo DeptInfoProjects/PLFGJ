@@ -7,6 +7,7 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import commun.Identification;
+import commun.RtoDetector;
 import commun.shapedetector;
 import org.opencv.core.Core;
 
@@ -147,6 +148,7 @@ public class Serveur {
             }
         });
 
+
         serveur.addEventListener("endTimeGame", Object.class, new DataListener<Object>() {
             @Override
             public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
@@ -158,6 +160,34 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
                 listTimeGame(socketIOClient);}
+        });
+
+
+        serveur.addEventListener("rtoImage", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                String[] list = s.split(",");
+                byte[] imgbytes;
+
+                //System.out.println("s de talle : "+s.length());
+                imgbytes = Base64.getMimeDecoder().decode(list[1]);
+
+                final File file = new File("shapes.png");
+                final FileOutputStream fileOut = new FileOutputStream(file);
+                fileOut.write(imgbytes);
+                fileOut.flush();
+                fileOut.close();
+
+                ArrayList<String> reponse;
+
+
+                RtoDetector coupRto = new RtoDetector();
+                reponse = coupRto.reponseServeur("shapes.png");
+
+
+                resultatRto(socketIOClient, reponse.get(0), reponse.get(1), reponse.get(2));
+
+            }
         });
     }
 
@@ -181,6 +211,7 @@ public class Serveur {
 
     }
 
+
     private void endTimeGame(SocketIOClient socketIOClient){
         int score = 0;
         int tendace = 0;
@@ -196,10 +227,14 @@ public class Serveur {
     private void formeValide(SocketIOClient socketIOClient, boolean verif) {
         socketIOClient.sendEvent("forme_valide", verif);
     }
+
     private  void listTimeGame(SocketIOClient socketIOClient){
         socketIOClient.sendEvent("listResTimeGame",time_detector_demander,time_detector_dessiner);
     }
 
+    private  void resultatRto(SocketIOClient socketIOClient, String cpJr, String cpSv, String res){
+        socketIOClient.sendEvent("resultatRto", cpJr, cpSv, res);
+    }
 
 
 
@@ -216,6 +251,7 @@ public class Serveur {
             return true;}
         if (args[0].equals("Point") && args[1].equals("1")){
             return true;}
+
         return false;
     }
 
@@ -302,7 +338,7 @@ public class Serveur {
         //config.setHostname("172.20.10.11");
         //config.setHostname("172.20.10.2");
         //spiti
-        config.setHostname("192.168.0.103");
+        config.setHostname("172.20.10.2");
         //maison sabri
         //config.setHostname("192.168.1.26");
         //tilefono

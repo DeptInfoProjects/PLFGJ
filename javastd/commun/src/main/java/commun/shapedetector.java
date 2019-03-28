@@ -151,6 +151,7 @@ public class shapedetector {
         Imgproc.findContours(resizeThresh,contours,new Mat(),Imgproc.RETR_EXTERNAL,Imgproc.CHAIN_APPROX_SIMPLE);
         shapedetector sd = new shapedetector();
 
+
         ArrayList<String> res = new ArrayList<>();
 
         for(MatOfPoint c : contours) {

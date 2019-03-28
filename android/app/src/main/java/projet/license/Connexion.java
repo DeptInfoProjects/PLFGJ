@@ -105,7 +105,6 @@ public class Connexion {
             });
 
 
-
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -133,7 +132,6 @@ public class Connexion {
         }
         connexion.emit("identification", pieceJointe);
     }
-
     public void envoyerStart() {
         connexion.emit("btnStart" );
     }
@@ -149,12 +147,12 @@ public class Connexion {
 
     public void sendImage(String image) {connexion.emit("imageB64",image);}
     public void timeImage(String image) {connexion.emit("timeImage",image);}
-
     public void rtoImage(String image) {connexion.emit("rtoCoup",image);}
 
 
     public void endTimeGame() {connexion.emit("endTimeGame"); }
     public void listResTimeGame() {connexion.emit("listResTimeGame"); }
+
 
     public void setSocket(Socket socket) {this.connexion = socket; }
     public void setControleur(Controleur ctrl) {this.controleur = ctrl;}

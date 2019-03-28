@@ -11,4 +11,5 @@ public interface Affichage {
     void listTimeGame(List<String> listFormeDem, List<String> listFormeRec);
 
     void rtoGameScore(String coupJoueur, String coupServeur, String resultat);
+
 }

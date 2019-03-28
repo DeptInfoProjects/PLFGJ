@@ -25,7 +25,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
         login = findViewById(R.id.btn_play);
         username = findViewById(R.id.editText);
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http:/172.20.10.2:10101",ctrl);
+        Connexion connexion = new Connexion("http:/192.168.0.101:10101",ctrl);
         connexion.seConnecter();
 
 

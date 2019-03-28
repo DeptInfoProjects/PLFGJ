@@ -45,6 +45,9 @@ public class Controleur {
     public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
         getAffichage().listTimeGame(listFormeDem,listFormeRec);
     }
+    public void resultatRto(String coupJoueur, String coupServeur, String resultat) {
+        getAffichage().rtoGameScore(coupJoueur, coupServeur, resultat);
+    }
 
     public void setAffichage(Affichage affichage) {
         this.affichage = affichage;
@@ -64,7 +67,4 @@ public class Controleur {
 
     public void rtoValider(String image) {connexion.rtoImage(image);}
 
-    public void resultatRto(String coupJoueur, String coupServeur, String resultat) {
-        getAffichage().rtoGameScore(coupJoueur, coupServeur, resultat);
-    }
 }

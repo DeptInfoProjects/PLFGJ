@@ -95,10 +95,12 @@ public class PaintView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 touch_move(x, y);
+                this.addTick();
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 touch_up();
+                this.addTick();
                 invalidate();
                 break;
         }
@@ -115,6 +117,7 @@ public class PaintView extends View {
 
         return bmp;
     }
+
 
     public void addTick(){
         this.countTicks = this.countTicks + 1;

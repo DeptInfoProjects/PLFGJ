@@ -65,7 +65,7 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.179:10101",ctrl);
         connexion.seConnecter();
 
 

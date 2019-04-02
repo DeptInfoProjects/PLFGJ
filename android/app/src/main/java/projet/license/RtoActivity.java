@@ -67,7 +67,7 @@ public class RtoActivity extends Activity implements  View.OnClickListener,Affic
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://172.20.10.11:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.179:10101",ctrl);
         connexion.seConnecter();
 
 

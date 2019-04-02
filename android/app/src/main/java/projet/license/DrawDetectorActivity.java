@@ -45,7 +45,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         ctrl = new Controleur(this);
         //tilefono
         //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://192.168.0.101:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.179:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -219,6 +219,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
+                myCanvas.clear();
                 break;
             case R.id.tutoriel:
                 ctrl.msgTutoriel();

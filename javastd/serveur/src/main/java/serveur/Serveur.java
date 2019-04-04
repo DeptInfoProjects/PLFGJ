@@ -7,6 +7,9 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 
+
+import commun.Identification;
+import commun.RtoDetector;
 import commun.shapedetector;
 import org.opencv.core.Core;
 
@@ -107,6 +110,41 @@ public class Serveur {
             }
         });
 
+        serveur.addEventListener("rtoCoup", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                byte[] imgbytes;
+
+                //System.out.println("s de talle : "+s.length());
+                imgbytes = Base64.getMimeDecoder().decode(s);
+
+                final File file = new File("shapes.png");
+                final FileOutputStream fileOut = new FileOutputStream(file);
+                fileOut.write(imgbytes);
+                fileOut.flush();
+                fileOut.close();
+
+                ArrayList<String> reponse;
+
+
+                RtoDetector coupRto = new RtoDetector();
+                reponse = coupRto.reponseServeur("shapes.png");
+
+
+                System.out.println("---------------------------------------------------------------");
+                System.out.println("RTO \nLe client a joué " + reponse.get(0));
+                System.out.println("Le serveur a joué " + reponse.get(1));
+                System.out.println("gagnant : " + reponse.get(2));
+
+                System.out.println("---------------------------------------------------------------");
+
+
+
+                resultatRto(socketIOClient, reponse.get(0), reponse.get(1), reponse.get(2));
+
+            }
+        });
+
 
     }
 
@@ -162,6 +200,10 @@ public class Serveur {
     }
     private  void listTimeGame(SocketIOClient socketIOClient,String res){
         socketIOClient.sendEvent("listResTimeGame", res );
+    }
+
+    private  void resultatRto(SocketIOClient socketIOClient, String cpJr, String cpSv, String res){
+        socketIOClient.sendEvent("resultatRto", cpJr, cpSv, res);
     }
 
 
@@ -247,7 +289,7 @@ public class Serveur {
 
         Configuration config = new Configuration();
         config.setMaxFramePayloadLength(200000);
-        config.setHostname("192.168.43.60");
+        config.setHostname("192.168.43.175");
         config.setPort(10101);
 
 

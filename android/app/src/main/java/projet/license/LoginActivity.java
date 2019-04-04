@@ -34,7 +34,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
         valider.setOnClickListener(this);
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.43.60:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.175:10101", ctrl);
         connexion.seConnecter();
 
     }

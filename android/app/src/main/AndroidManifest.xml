@@ -22,6 +22,7 @@
         <activity android:name=".DrawDetectorActivity"/>
         <activity android:name=".TimeDetectorActivity"/>
         <activity android:name=".TrainingActivity"/>
+        <activity android:name=".RtoDetectorActivity"/>
     </application>
 
 </manifest>

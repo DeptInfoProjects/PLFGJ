@@ -25,12 +25,17 @@ public class RtoDetector {
 
     public String detectRto(Mat image) {
 
-        String formeDetecte = "not a shape";
+        String formeDetecte = "Not a Shape";
 
-
+        MatOfPoint2f img2f = new MatOfPoint2f();
         MatOfPoint approxImg = new MatOfPoint();
-        approxImg = shapedetector.convertUtil(image);
+        MatOfPoint2f approxImg2f = new MatOfPoint2f();
 
+        image.convertTo(img2f, CvType.CV_32FC2);
+
+        Imgproc.approxPolyDP(img2f, approxImg2f, 42, true);
+
+        approxImg2f.convertTo(approxImg, CvType.CV_32S);
 
 
         double height = approxImg.size().height;
@@ -163,25 +168,16 @@ public class RtoDetector {
         if (coupServeur.equals(coupJoueur)) {
             reponse.add("Egalite");
         }
-        else if(coupJoueur.equals("Triangle")){
-            if (coupServeur.equals("Carre")){
-                reponse.add("Joueur");
-            }
-            else reponse.add("Serveur");
-        }
-        else if(coupJoueur.equals("Carre")){
-            if (coupServeur.equals("Circle")){
-                reponse.add("Joueur");
-            }
-            else reponse.add("Serveur");
-        }
-        else if(coupJoueur.equals("Circle")){
-            if (coupServeur.equals("Triangle")){
-                reponse.add("Joueur");
-            }
-            else reponse.add("Serveur");
-        }
-        else reponse.add(coupJoueur);
+        else if(coupJoueur.equals("Triangle") && coupServeur.equals("Circle")){ reponse.add("Serveur"); }
+        else if(coupJoueur.equals("Triangle") && coupServeur.equals("Carre")){ reponse.add("Joueur"); }
+
+        else if(coupJoueur.equals("Carre") && coupServeur.equals("Circle")){ reponse.add("Joueur"); }
+        else if(coupJoueur.equals("Carre") && coupServeur.equals("Triangle")){ reponse.add("Serveur"); }
+
+        else if(coupJoueur.equals("Circle") && coupServeur.equals("Carre")){ reponse.add("Serveur"); }
+        else if(coupJoueur.equals("Circle") && coupServeur.equals("Triangle")){ reponse.add("Joueur"); }
+
+        else reponse.add("erreur");
 
 
         return reponse;

@@ -127,6 +127,8 @@ public class Connexion {
         }
         connexion.emit("identification", pieceJointe);
     }
+
+    // pour DrawDetector
     public void envoyerStart() {
         connexion.emit("btnStart" );
     }
@@ -134,12 +136,12 @@ public class Connexion {
         connexion.emit("nbpoints", list);
     }
 
-
+    // Envoie d'images au serveur
     public void sendImage(String image) {connexion.emit("imageB64",image);}
     public void timeImage(String image) {connexion.emit("timeImage",image);}
     public void rtoImage(String image) {connexion.emit("rtoCoup",image);}
 
-
+    // pour timeDetector
     public void endTimeGame() {connexion.emit("endTimeGame"); }
     public void listResTimeGame() {connexion.emit("listResTimeGame"); }
 

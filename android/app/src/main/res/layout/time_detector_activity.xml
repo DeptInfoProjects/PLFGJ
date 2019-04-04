@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sample">
+
+
+    <TextView
+        android:id="@+id/titre"
+        android:layout_width="251dp"
+        android:layout_height="101dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:text="TIME DETECTOR"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="34dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="168dp"
+        android:layout_height="101dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-8dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/titre"
+        android:src="@drawable/logo" />
+
+    <Button
+        android:id="@+id/button_start_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/buttonshapecolor"
+        android:text="START"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_toEndOf="@+id/button_start_pause"
+        android:background="@drawable/buttonshapecolor"
+        android:text="RESET"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="136dp"
+        android:layout_height="51dp"
+        android:layout_above="@+id/myCanvas"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="-1dp"
+        android:layout_toEndOf="@+id/formeDemande"
+        android:background="@drawable/buttonshapecolor"
+        android:text="SEND"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
+
+    <projet.license.PaintView
+        android:id="@+id/myCanvas"
+        android:layout_width="wrap_content"
+        android:layout_height="514dp"
+        android:layout_above="@+id/button_reset"
+        android:layout_below="@+id/formeDemande"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="51dp"
+        android:layout_marginBottom="9dp" />
+
+    <TextView
+        android:id="@+id/formeDemande"
+        android:layout_width="246dp"
+        android:layout_height="51dp"
+        android:layout_below="@+id/titre"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Press Start"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_view_countdown"
+        android:layout_width="164dp"
+        android:layout_height="57dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="67dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/button_reset"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/demande"
+        android:layout_width="154dp"
+        android:layout_height="513dp"
+        android:layout_alignTop="@+id/myCanvas"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="1dp"
+        android:fontFamily="cursive"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dessin"
+        android:layout_width="151dp"
+        android:layout_height="511dp"
+        android:layout_alignTop="@+id/myCanvas"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="52dp"
+        android:fontFamily="cursive"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+</RelativeLayout>

@@ -1,7 +1,6 @@
 package projet.license;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,40 +11,46 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 import java.util.Random;
-import commun.ListDemande;
+
+import commun.Affichage;
+import commun.Connexion;
+import commun.Controleur;
+
+
 import static android.graphics.Color.MAGENTA;
 
 
-public class DrawDetectorActivity extends Activity implements View.OnClickListener, Affichage{
+public  class DrawDetectorActivity extends Activity implements View.OnClickListener, Affichage {
 
-    private Button effacer, couleur, btnJouer, start, tutoriel;
-    private TextView titre, fdem, randform, click, score,rightBord,leftBord;
+    private Button effacer, couleur, start, tutoriel,valider;
+    private TextView  fdem, score;
     Controleur ctrl;
     public int i = 0;
     private String formeDemande = "Press start";
-    private ListDemande listDemande = new ListDemande();
     public PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
     private RelativeLayout mRelativeLayout;
     private Context mContext;
     private int textCol;
-
+    private boolean debut = true;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawdetector);
+        setContentView(R.layout.draw_detector_activity);
         this.init();
 
 
         ctrl = new Controleur(this);
         //tilefono
         //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://192.168.43.179:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.60:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -60,31 +65,27 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
 
     private void init() {
-        effacer = findViewById(R.id.effacer);
-        couleur = findViewById(R.id.color);
-        btnJouer = findViewById(R.id.valider);
-        start = findViewById(R.id.start1);
-        titre = findViewById(R.id.textView6);
-        fdem = findViewById(R.id.textView4);
-        randform = findViewById(R.id.textView3);
-        tutoriel = findViewById(R.id.tutoriel);
-        score = findViewById(R.id.score);
-        click =  findViewById(R.id.click);
-        rightBord = findViewById(R.id.rightBord);
-        leftBord = findViewById(R.id.leftBord);
+        effacer = findViewById(R.id.CLEAR);
+        couleur = findViewById(R.id.pencolor);
+        start = findViewById(R.id.start);
+        valider = findViewById(R.id.valider);
+
+        fdem = findViewById(R.id.forme);
+        tutoriel = findViewById(R.id.help);
+        score = findViewById(R.id.ticks);
+
 
 
 
 
         mContext = getApplicationContext();
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.container);
-        myCanvas = (PaintView) findViewById(R.id.myCanvas);
+        myCanvas = findViewById(R.id.myCanvas);
 
         effacer.setOnClickListener(this);
         couleur.setOnClickListener(this);
         start.setOnClickListener(this);
-        btnJouer.setOnClickListener(this);
-        tutoriel.setOnClickListener(this);
+        valider.setOnClickListener(this);
+
 
     }
 
@@ -92,42 +93,6 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         finish();    // retourner page home
     }
 
-    private void changeTheme(int choix) {
-        if(choix == Color.MAGENTA || choix ==Color.YELLOW || choix==Color.LTGRAY)
-            { textCol = Color.WHITE;}
-        else
-            { textCol = Color.DKGRAY;}
-        if(choix == Color.BLUE)
-        { textCol = Color.WHITE;}
-        couleur.setTextColor(textCol);
-        start.setTextColor(textCol);
-        //btnJouer.setBackgroundColor(choix);
-        btnJouer.setTextColor(textCol);
-        //effacer.setBackgroundColor(choix);
-        effacer.setTextColor(textCol);
-        titre.setBackgroundColor(choix);
-        titre.setTextColor(textCol);
-        fdem.setBackgroundColor(choix);
-        fdem.setTextColor(textCol);
-        randform.setBackgroundColor(choix);
-        randform.setTextColor(textCol);
-        //tutoriel.setBackgroundColor(choix);
-        tutoriel.setTextColor(textCol);
-        score.setBackgroundColor(choix);
-        score.setTextColor(textCol);
-        click.setBackgroundColor(choix);
-        click.setTextColor(textCol);
-        rightBord.setBackgroundColor(choix);
-        rightBord.setTextColor(textCol);
-        leftBord.setBackgroundColor(choix);
-        leftBord.setTextColor(textCol);
-        mRelativeLayout.setBackgroundColor(choix);
-
-
-
-
-
-    }
 
     private int getColor() {
         switch (this.i) {
@@ -146,7 +111,7 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
             case 4:
                 this.i = this.i + 1;
                 return Color.RED;
-                case 5:
+            case 5:
                 this.i = 0;
                 return Color.BLUE;
         }
@@ -154,82 +119,54 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
 
     }
 
-    private int getColorEffacer() {
-        switch (this.i - 1) {
-            case 0:
-                changeTheme(Color.LTGRAY);
-                return Color.LTGRAY;
-            case 1:
-                changeTheme(Color.MAGENTA);
-                return Color.MAGENTA;
-            case 2:
-                changeTheme(Color.YELLOW);
-                return Color.YELLOW;
-            case 3:
-                changeTheme(Color.BLUE);
-                return Color.BLUE;
-            case 4:
-                changeTheme(Color.BLACK);
-                return Color.BLACK;
-        }
-        return Color.WHITE;
-    }
 
     private void afficherTick() {
-        click.setText(myCanvas.countTicks+"");
+        score.setText(myCanvas.countTicks+"");
     }
 
     public void newForme(){
         Random rand = new Random();
         int rando = rand.nextInt(5);
         String formeRandom = formes[rando];
-        randform.setText(formeRandom);
+        fdem.setText(formeRandom);
         formeDemande = formeRandom;
-        listDemande.setForme(formes[rando]);
-        listDemande.setTicks(0);
     }
     public void onClick(View v){
         Button press = (Button)findViewById(v.getId());
         switch (v.getId()){
-            case R.id.effacer:
+            case R.id.CLEAR:
                 myCanvas.clear();
-                ctrl.msgReset();
                 myCanvas.countTicks = 0;
-                listDemande.setTicks(0);
                 afficherTick();
-                Log.d("Button Pressed : ",press.getText() + "");
                 break;
-            case R.id.start1:
-                leftBord.setBackgroundColor(mRelativeLayout.getSolidColor());
-                rightBord.setBackgroundColor(mRelativeLayout.getSolidColor());
+            case R.id.start:
                 newForme();
-                ctrl.msgStart();
-                Log.d("Button Pressed : ",press.getText() + "");
                 myCanvas.countTicks = 0;
                 afficherTick();
-                break;
-            case R.id.color:
-                myCanvas.setBackgroundColor(Color.BLACK);
-                myCanvas.mPaint.setColor(getColor());
-                ctrl.msgColor();
-                Log.d("Button Pressed : ", press.getText() + "");
+                start.setVisibility(View.INVISIBLE);
+                valider.setVisibility(View.VISIBLE);
                 break;
             case R.id.valider:
                 ctrl.msgValider(formeDemande +"," + myCanvas.getTicks());
-                Log.d("Button Pressed : ",press.getText() + "");
                 afficherTick();
                 myCanvas.countTicks = 0;
+                newForme();
                 myCanvas.clear();
                 break;
-            case R.id.tutoriel:
-                ctrl.msgTutoriel();
 
+                case R.id.pencolor:
+                myCanvas.setBackgroundColor(Color.BLACK);
+                myCanvas.mPaint.setColor(getColor());
+                break;
 
         }
     }
 
 
 
+    public void showToast(View v){
+        Toast.makeText(this,"Dessiner les points de la forme demande\nps: Rond -> 5",Toast.LENGTH_LONG).show();
+    }
 
     public void timeGameScor(Integer score,Integer tentative){
         runOnUiThread(new Runnable() {
@@ -240,8 +177,13 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
         });
     }
 
+    @Override
+    public void listTimeGame(String listDem, String listRec) {
 
-    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
+    }
+
+
+    public void listTimeGame(List<Object> listFormeDem, List<Object> listFormeRec) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -262,12 +204,14 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
                 if (b){
                     String txt = ("Juste");
                     score.setText(txt);
-                    leftBord.setBackgroundColor(Color.GREEN);
+                    score.setTextColor(Color.GREEN);
+
                 }
                 else {
                     String txt = ("Faux");
                     score.setText(txt);
-                    rightBord.setBackgroundColor(Color.RED);
+                    score.setTextColor(Color.RED);
+
 
 
                 }
@@ -278,6 +222,6 @@ public class DrawDetectorActivity extends Activity implements View.OnClickListen
     public String FormeCourant(){
         return this.formeDemande;
     }
- }
+}
 
 

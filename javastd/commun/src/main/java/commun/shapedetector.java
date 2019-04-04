@@ -6,8 +6,6 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
-import java.io.*;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
 import static org.opencv.imgproc.Imgproc.boundingRect;
@@ -65,9 +61,6 @@ public class shapedetector {
                 break;
             case 7:
                 shape = "Heptagon";
-                break;
-            case 8:
-                shape = "Octagon";
                 break;
             default:
                 shape = "Circle";
@@ -171,7 +164,7 @@ public class shapedetector {
 
 
             Image imageRes = sd.Mat2BufferedImage(matrix);
-            sd.displayImage(imageRes);
+
         }
 
 

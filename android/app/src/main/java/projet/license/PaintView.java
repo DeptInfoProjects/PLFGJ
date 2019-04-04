@@ -35,7 +35,7 @@ public class PaintView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(9);
+        mPaint.setStrokeWidth(12);
         mPaint.setColor(Color.WHITE);
         this.setBackgroundColor(Color.BLACK);
     }
@@ -95,12 +95,12 @@ public class PaintView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 touch_move(x, y);
-                this.addTick();
+
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 touch_up();
-                this.addTick();
+
                 invalidate();
                 break;
         }

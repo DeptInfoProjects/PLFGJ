@@ -6,11 +6,9 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
-import commun.Identification;
-import commun.RtoDetector;
+
 import commun.shapedetector;
 import org.opencv.core.Core;
-
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -20,110 +18,66 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class Serveur {
 
+
+public class Serveur {
+    String player;
     SocketIOServer serveur;
     final Object attenteConnexion = new Object();
-    private List<String> time_detector_demander = new ArrayList<>();
-    private List<String> time_detector_dessiner = new ArrayList<>();
-    Identification client;
+    private ArrayList<String> time_detector_demander = new ArrayList<>();
+    private ArrayList<String> time_detector_dessiner = new ArrayList<>();
     private Integer compter = 0;
 
 
-    public Serveur(Configuration config)  {
+
+
+    public Serveur(Configuration config) {
         serveur = new SocketIOServer(config);
         System.out.println("préparation du listener");
+
         serveur.addConnectListener(new ConnectListener() {
             public void onConnect(SocketIOClient socketIOClient) {
                 System.out.println("-------------------------------------------------------------");
-                System.out.println("connexion de "+socketIOClient.getRemoteAddress());
-
-                // on ne s'arrête plus ici
+                System.out.println("connexion de " + socketIOClient.getRemoteAddress());
             }
         });
 
 
+// *********************************************************************************************************************
+//PARTIE COMMUNICATION CLIENT VERS SERVEUR
+// *********************************************************************************************************************
+
+
+        serveur.addEventListener("username", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                System.out.println("Welcome " + s);
+                player = s;
+            }
+        });
         serveur.addEventListener("nbpoints", String.class, new DataListener<String>() {
             @Override
-            public void onData(SocketIOClient socketIOClient, String forme2, AckRequest ackRequest) throws Exception {
-                String[] list = forme2.split(",");
+            public void onData(SocketIOClient socketIOClient, String coup, AckRequest ackRequest) throws Exception {
+                String[] list = coup.split(",");
                 System.out.println(list);
                 boolean verif = verifier(list);
                 if ( verif ) {
                     System.out.println("---------------------------------------------------------------");
-                    System.out.println("Forme demandé   : " + list[0]);
-                    System.out.println("Points donné    : " + list[1]);
-                    System.out.println("Serveur :  Forme valide , le client passe a la prochaine ");
+                    System.out.println("Forme demandée   : " + list[0]);
+                    System.out.println("Points donnés    : " + list[1]);
+                    System.out.println("serveur.Serveur :  Forme valide , le client passe a la prochaine ");
                     formeValide(socketIOClient, verif);
 
                 } else {
                     System.out.println("---------------------------------------------------------------");
-                    System.out.println("Forme demandé   : " + list[0]);
-                    System.out.println("Points donné    : " + list[1]);
-                    System.out.println("Serveur :  Forme pas valide , le client passe a la prochaine ");
+                    System.out.println("Forme demandée   : " + list[0]);
+                    System.out.println("Points donnés    : " + list[1]);
+                    System.out.println("serveur.Serveur :  Forme pas valide , le client passe a la prochaine ");
                     formeValide(socketIOClient, verif);
                 }
 
             }
-        } );
-
-
-
-        serveur.addEventListener("btnStart", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient,Object o , AckRequest ackRequest) throws  Exception{
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Client  : Changement de forme geometrique ");
-                System.out.println("Serveur : Forme demandé a changé " );
-            }
         });
-
-        serveur.addEventListener("btnEffacer", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Client  : Effacement du Canvas");
-                System.out.println("Serveur : Nouveau Canvas a votre disposition ");
-            }
-        });
-
-        serveur.addEventListener("btnColor", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Client  : Changement de Couleur");
-                System.out.println("Serveur : Nouvelle couleur a votre disposition ");
-            }
-        });
-
-        serveur.addEventListener("Bien recu5", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient,Object o, AckRequest ackRequest) throws  Exception{
-                System.out.println("-------------------------------------------------------------");
-                System.out.println("Client  : Affichage de Tuto");
-                System.out.println("Serveur : Tutoriel du jeu a votre disposition ");
-            }
-        });
-
-        serveur.addEventListener("imageB64", String.class, new DataListener<String>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-
-                byte[] imgbytes;
-
-                //System.out.println("s de talle : "+s.length());
-                imgbytes = Base64.getMimeDecoder().decode(s);
-
-                final File file = new File("shapes.png");
-                final FileOutputStream fileOut = new FileOutputStream(file);
-                fileOut.write(imgbytes);
-                fileOut.flush();
-                fileOut.close();
-                shapedetector sd = new shapedetector();
-                System.out.println(sd.detectShapes("shapes.png"));
-            }
-        });
-
         serveur.addEventListener("timeImage", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
@@ -143,56 +97,24 @@ public class Serveur {
                 time_detector_demander.add(list[0]);
                 time_detector_dessiner.add(sd.detectShapes("shapes.png").get(0));
                 compter ++;
-                System.out.println(compter + " : Forme Demandée : " + time_detector_demander);
-                System.out.println("  : Forme Dessinée : " + time_detector_dessiner);
+
+                String res = list[0];
+                res  += ",";
+                res  += res + sd.detectShapes("shapes.png").get(0);
+                System.out.println(compter + " : Forme Demande : " + time_detector_demander);
+                System.out.println("  : Forme Dessine : " + time_detector_dessiner);
+                listTimeGame(socketIOClient,res);
             }
         });
 
 
-        serveur.addEventListener("endTimeGame", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
-                endTimeGame(socketIOClient);
-            }
-        });
-
-        serveur.addEventListener("listResTimeGame", Object.class, new DataListener<Object>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, Object o, AckRequest ackRequest) throws Exception {
-                listTimeGame(socketIOClient);}
-        });
-
-
-        serveur.addEventListener("rtoCoup", String.class, new DataListener<String>() {
-            @Override
-            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-
-                byte[] imgbytes;
-
-                imgbytes = Base64.getMimeDecoder().decode(s);
-
-                final File file = new File("shapes.png");
-                final FileOutputStream fileOut = new FileOutputStream(file);
-                fileOut.write(imgbytes);
-                fileOut.flush();
-                fileOut.close();
-
-                ArrayList<String> reponse;
-
-
-                RtoDetector coupRto = new RtoDetector();
-                reponse = coupRto.reponseServeur("shapes.png");
-
-
-                resultatRto(socketIOClient, reponse.get(0), reponse.get(1), reponse.get(2));
-
-            }
-        });
     }
 
+// *********************************************************************************************************************
+// METHODES UTILES
+// *********************************************************************************************************************
 
-
-    private void démarrer() throws IOException {
+    private void demarrer() throws IOException {
 
         serveur.start();
 
@@ -210,36 +132,7 @@ public class Serveur {
 
     }
 
-
-    private void endTimeGame(SocketIOClient socketIOClient){
-        int score = 0;
-        int tendace = 0;
-        for(int i = 0 ; i < time_detector_demander.size(); i++){
-            if (time_detector_demander.get(i).equals(time_detector_dessiner.get(i))){
-                score ++;
-            }
-            tendace ++;
-        }
-        socketIOClient.sendEvent("scoreTimeGame",score,tendace);
-    }
-
-    private void formeValide(SocketIOClient socketIOClient, boolean verif) {
-        socketIOClient.sendEvent("forme_valide", verif);
-    }
-
-    private  void listTimeGame(SocketIOClient socketIOClient){
-        socketIOClient.sendEvent("listResTimeGame",time_detector_demander,time_detector_dessiner);
-    }
-
-    private  void resultatRto(SocketIOClient socketIOClient, String cpJr, String cpSv, String res){
-        socketIOClient.sendEvent("resultatRto", cpJr, cpSv, res);
-    }
-
-
-
-
-
-    public static boolean verifier(String[] args){
+    private static boolean verifier(String[] args){ // Verification de forme pour le DrawDetector
         if (args[0].equals("Triangle") && args[1].equals("3")){
             return true;}
         if (args[0].equals("Rond") && args[1].equals("5")){
@@ -256,6 +149,28 @@ public class Serveur {
 
 
 
+
+
+
+
+// *********************************************************************************************************************
+//PARTIE COMMUNICATION SERVEUR VERS CLIENT
+// *********************************************************************************************************************
+
+    private void formeValide(SocketIOClient socketIOClient, boolean verif) {
+        socketIOClient.sendEvent("forme_valide", verif);
+    }
+    private  void listTimeGame(SocketIOClient socketIOClient,String res){
+        socketIOClient.sendEvent("listResTimeGame", res );
+    }
+
+
+
+
+
+// *********************************************************************************************************************
+// MAIN
+// *********************************************************************************************************************
 
     public static void loadOpenCV() throws IOException, URISyntaxException {
         // pour trouver le chemin dans le jar d'opencv
@@ -275,7 +190,7 @@ public class Serveur {
             ext = ".so";
         }
 
-        // on pourrait mettre la lib dans un dossier temporaire... là, on met à la racine du projet
+        // on pourrait mettre la lib dans un dossier temporaire... lÃ , on met Ã  la racine du projet
         File testLib = new File(prefixe+Core.NATIVE_LIBRARY_NAME + ext);
 
 
@@ -294,7 +209,7 @@ public class Serveur {
             // phase 2 : recopy
             InputStream in = jarFile.getInputStream(entry);
 
-            File fileOut = new File(prefixe+Core.NATIVE_LIBRARY_NAME+ext);
+            File fileOut = new File(prefixe+ Core.NATIVE_LIBRARY_NAME+ext);
             OutputStream out = new FileOutputStream(fileOut);
 
 
@@ -304,7 +219,7 @@ public class Serveur {
                 out.write(buf, 0, len);
             }
 
-            // c'est recopié
+            // c'est recopiÃ©
             in.close();
             out.close();
         }
@@ -313,16 +228,12 @@ public class Serveur {
         System.load(testLib.getAbsolutePath());
     }
 
-
-
-
     public static final void main(String []args) throws IOException {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
 
         try {
             loadOpenCV();
@@ -331,26 +242,20 @@ public class Serveur {
         }
 
 
+
+
+
         Configuration config = new Configuration();
-        //fac
-        //config.setHostname("10.1.124.22");
-        //config.setHostname("172.20.10.11");
-        //config.setHostname("172.20.10.2");
-        //spiti
-        config.setHostname("172.20.10.11");
-        //maison sabri
-        //config.setHostname("192.168.1.26");
-        //tilefono
-        //config.setHostname("192.168.0.101");
+        config.setMaxFramePayloadLength(200000);
+        config.setHostname("192.168.43.60");
         config.setPort(10101);
 
 
         Serveur serveur = new Serveur(config);
-        serveur.démarrer();
+        serveur.demarrer();
 
 
         System.out.println("fin du main");
-
 
     }
 

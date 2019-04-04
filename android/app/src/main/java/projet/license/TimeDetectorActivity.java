@@ -1,45 +1,43 @@
 package projet.license;
 
-
 import android.app.Activity;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.CountDownTimer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import commun.Affichage;
+import commun.Connexion;
+import commun.Controleur;
 
-
-public class TimeDetectorActivity extends Activity implements  View.OnClickListener,Affichage{
+public class TimeDetectorActivity extends Activity implements View.OnClickListener, Affichage {
     private static final long START_TIME_IN_MILLIS = 30000;
-
-
-    private TextView mTextViewCountDown;
+    private TextView mTextViewCountDown,mDemande,mDessin;
     private Button mButtonStartPause;
     private Button mButtonReset;
     private Button mButtonValider;
     private PaintView myCanvas;
     private Controleur ctrl;
     private Boolean control = true;
-    final String[] formes = {"Point", "Segment","Rectangle", "Triangle", "Carre", "Circle","Pentagon","Hexagon","Heptagon","Octagon"};
     private CountDownTimer mCountDownTimer;
+    private List<String> listformeDem = new ArrayList<>();
+    private List<String> listformeRec = new ArrayList<>();
+
+
+
+
+    final String[] formes = {"Point", "Segment","Rectangle", "Triangle", "Carre", "Circle","Pentagon","Hexagon","Heptagon","Octagon"};
+
     private TextView formeDemande;
     private String formeCourant;
-    private Button mButtonHistory;
-    private String resultat;
-
-
-
-
-
     private boolean mTimerRunning;
 
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
@@ -47,28 +45,19 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timedetector);
-
-
-
+        setContentView(R.layout.time_detector_activity);
         formeDemande = findViewById(R.id.formeDemande);
-
         mTextViewCountDown = findViewById(R.id.text_view_countdown);
-        myCanvas = findViewById(R.id.paintView);
+        myCanvas = findViewById(R.id.myCanvas);
         mButtonStartPause = findViewById(R.id.button_start_pause);
         mButtonReset = findViewById(R.id.button_reset);
-        mButtonValider = findViewById(R.id.valider);
-        mButtonHistory = findViewById(R.id.history);
+        mButtonValider = findViewById(R.id.send);
+        mDemande = findViewById(R.id.demande);
+        mDessin = findViewById(R.id.dessin);
+
         ctrl = new Controleur(this);
-        //fac
-        //Connexion connexion = new Connexion("http://10.1.124.22:10101",ctrl);
-        //spiti
-        //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
-        //tilefono
-        Connexion connexion = new Connexion("http://192.168.43.179:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.43.60:10101", ctrl);
         connexion.seConnecter();
-
-
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +79,10 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
                 resetTimer();
                 myCanvas.clear();
                 formeDemande.setText("");
+                listformeDem = new ArrayList<>();
+                listformeRec = new ArrayList<>();
+                mDemande.setVisibility(View.INVISIBLE);
+                mDessin.setVisibility(View.INVISIBLE);
             }
         });
         mButtonValider.setOnClickListener(new View.OnClickListener() {
@@ -102,31 +95,6 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
 
             }
 
-        });
-        mButtonHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(TimeDetectorActivity.this);
-                builder.setCancelable(true);
-                builder.setTitle("Resultat");
-
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //textRes.setText(resultat);
-                        //textRes.setVisibility(View.VISIBLE);
-                    }
-                });
-                builder.show();
-            }
         });
         updateCountDownText();
     }
@@ -145,8 +113,9 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
                 mButtonStartPause.setText("Start");
                 mButtonStartPause.setVisibility(View.INVISIBLE);
                 mButtonReset.setVisibility(View.VISIBLE);
-                ctrl.endTimeGame();
-                //ctrl.listTimeGame();
+                mDemande.setVisibility(View.VISIBLE);
+                mDessin.setVisibility(View.VISIBLE);
+                showToast();
             }
         }.start();
 
@@ -188,13 +157,15 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
         mTextViewCountDown.setText(score +"/" +tentative);
     }
 
-    @Override
-    public void listTimeGame(List<String> listFormeDem, List<String> listFormeRec) {
-        String res = "Demandé    |  Dessiné    '\n'";
-        for (int i = 0; i < listFormeDem.size(); i++) {
-            res += listFormeDem.get(i) + "'\t' |  " + listFormeRec.get(i) + "'\n";
-        }
-        this.resultat = res;
+
+    public void listTimeGame( String listDem, String listRec) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                listformeDem.add(listDem);
+                listformeRec.add(listRec);
+            }
+        });
 
     }
 
@@ -202,6 +173,20 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
     public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
 
     }
+
+    public void showToast(){
+        String listDemande = "";
+        listDemande += "Demandé \n";
+        String listDessin = "";
+        listDessin += "| Dessiné \n";
+        for(int i = 0; i < listformeDem.size();i++){
+            listDemande += listformeDem.get(i) + "\n";
+            listDessin += "| "+ listformeRec.get(i) +"\n";}
+
+        mDessin.setText(listDessin);
+        mDemande.setText(listDemande);
+  }
+
 
     @Override
     public void onClick(View v) { }
@@ -216,5 +201,3 @@ public class TimeDetectorActivity extends Activity implements  View.OnClickListe
 
 
 }
-
-

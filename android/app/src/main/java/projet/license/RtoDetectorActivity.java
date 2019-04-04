@@ -75,7 +75,7 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
         //spiti
         //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
         //tilefono
-        Connexion connexion = new Connexion("http://192.168.43.175:10101",ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101",ctrl);
         connexion.seConnecter();
 
 
@@ -121,7 +121,10 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
 
     }
 
+    @Override
+    public void riddleGame(boolean rep) {
 
+    }
 
 
 

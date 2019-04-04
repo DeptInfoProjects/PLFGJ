@@ -62,6 +62,15 @@ public class Connexion {
                     }
                 }
             });
+			
+			connexion.on("riddleGameRes", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    boolean rep = (boolean) args[0] ;
+                    ctrl.riddleRep(rep);
+                }
+            });
+			
             connexion.on("scoreTimeGame", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -140,6 +149,7 @@ public class Connexion {
     public void sendImage(String image) {connexion.emit("imageB64",image);}
     public void timeImage(String image) {connexion.emit("timeImage",image);}
     public void rtoImage(String image) {connexion.emit("rtoCoup",image);}
+    public void riddleImage(String image) {connexion.emit("riddleImage",image); }
 
     // pour timeDetector
     public void endTimeGame() {connexion.emit("endTimeGame"); }

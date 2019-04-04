@@ -35,7 +35,7 @@ public class PaintView extends View {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(12);
+        mPaint.setStrokeWidth(15);
         mPaint.setColor(Color.WHITE);
         this.setBackgroundColor(Color.BLACK);
     }

@@ -30,6 +30,7 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
     private CountDownTimer mCountDownTimer;
     private List<String> listformeDem = new ArrayList<>();
     private List<String> listformeRec = new ArrayList<>();
+    private List<String> list2forme = new ArrayList<>();
 
 
 
@@ -56,7 +57,7 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
         mDessin = findViewById(R.id.dessin);
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.43.175:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
         connexion.seConnecter();
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +152,10 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
     public void majScor(boolean ok) {
 
     }
+    @Override
+    public void riddleGame(boolean rep) {
+
+    }
 
     @Override
     public void timeGameScor(Integer score, Integer tentative) {
@@ -181,7 +186,7 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
         listDessin += "| Dessiné \n";
         for(int i = 0; i < listformeDem.size();i++){
             listDemande += listformeDem.get(i) + "\n";
-            listDessin += "| "+ listformeRec.get(i) +"\n";}
+            listDessin += "| "+ list2forme.get(i) +"\n";}
 
         mDessin.setText(listDessin);
         mDemande.setText(listDemande);
@@ -195,8 +200,10 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
         Random rand = new Random();
         int x = rand.nextInt(9);
         formeCourant = formes[x];
+        list2forme.add(formeCourant);
         return formeCourant;
     }
+
 
 
 

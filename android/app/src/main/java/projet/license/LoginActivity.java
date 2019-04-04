@@ -34,7 +34,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
         valider.setOnClickListener(this);
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.43.175:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
         connexion.seConnecter();
 
     }
@@ -66,6 +66,11 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
 
     @Override
     public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
+
+    }
+	
+	@Override
+    public void riddleGame(boolean rep) {
 
     }
 }

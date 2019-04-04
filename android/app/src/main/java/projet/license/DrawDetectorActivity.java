@@ -50,7 +50,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
         ctrl = new Controleur(this);
         //tilefono
         //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://192.168.43.175:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -194,6 +194,11 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
     @Override
     public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
+
+    }
+	
+	@Override
+    public void riddleGame(boolean rep) {
 
     }
 

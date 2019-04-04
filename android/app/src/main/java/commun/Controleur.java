@@ -44,6 +44,9 @@ public class Controleur {
         getAffichage().rtoGameScore(coupJoueur, coupServeur, resultat);
     }
 
+    public void riddleRep(boolean rep) {getAffichage().riddleGame(rep); }
+
+
     public void setAffichage(Affichage affichage) {
         this.affichage = affichage;
     }
@@ -60,5 +63,5 @@ public class Controleur {
     public  void listTimeGame2(){connexion.listResTimeGame();}
 
     public void rtoValider(String image) {connexion.rtoImage(image);}
-
+    public void riddleValider(String image) {connexion.riddleImage(image);}
 }

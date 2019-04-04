@@ -81,6 +81,36 @@ public class Serveur {
 
             }
         });
+		
+		
+		        serveur.addEventListener("riddleImage", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                String[] list = s.split(",");
+                byte[] imgbytes;
+                imgbytes = Base64.getMimeDecoder().decode(list[1]);
+
+
+                final File file = new File("shapes.png");
+                final FileOutputStream fileOut = new FileOutputStream(file);
+                fileOut.write(imgbytes);
+                fileOut.flush();
+                fileOut.close();
+
+                RtoDetector rt = new RtoDetector() ;
+                String imageRec = rt.detectRtoS("shapes.png");
+
+                System.out.println("Réponse reçue :" + imageRec);
+                System.out.println("Réponse attendue :" + list[0]);
+
+                riddleGame(socketIOClient,list[0].equals(imageRec));
+
+
+
+            }
+        });
+		
+		
         serveur.addEventListener("timeImage", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
@@ -206,7 +236,9 @@ public class Serveur {
         socketIOClient.sendEvent("resultatRto", cpJr, cpSv, res);
     }
 
-
+    private void riddleGame(SocketIOClient socketIOClient,boolean rep){
+        socketIOClient.sendEvent("riddleGameRes",rep);
+    }
 
 
 
@@ -289,7 +321,7 @@ public class Serveur {
 
         Configuration config = new Configuration();
         config.setMaxFramePayloadLength(200000);
-        config.setHostname("192.168.43.175");
+        config.setHostname("172.20.10.2");
         config.setPort(10101);
 
 

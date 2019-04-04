@@ -23,6 +23,7 @@
         <activity android:name=".TimeDetectorActivity"/>
         <activity android:name=".TrainingActivity"/>
         <activity android:name=".RtoDetectorActivity"/>
+		<activity android:name=".RiddleActivity"/>
     </application>
 
 </manifest>

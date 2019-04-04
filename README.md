@@ -63,7 +63,11 @@ Date prevu :    28 / 03 / 2019
 ### Livraison 8 :
 Date prevu :    04 / 04 / 2019
 
+* Correctifs des dysfonctionnements de "RTO Detector"
+* Nouveau jeu d'énigme "Riddle Game"
 * Mode ENTRAÎNEMENT (hors ligne)
+
+
 
 
 ### Livraison FINALE :

@@ -31,7 +31,7 @@ public class Serveur {
     private ArrayList<String> time_detector_dessiner = new ArrayList<>();
     private Integer compter = 0;
 
-
+    public Serveur() { } // utilisation pour les tests
 
 
     public Serveur(Configuration config) {
@@ -177,6 +177,8 @@ public class Serveur {
 
 
     }
+
+
 
 // *********************************************************************************************************************
 // METHODES UTILES

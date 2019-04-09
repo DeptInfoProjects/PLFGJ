@@ -107,12 +107,12 @@ public class RtoDetector {
 
 
             Image imageRes = rd.Mat2BufferedImage(matrix);
-            rd.displayImage(imageRes);
+
         }
 
 
         if (res.size() > 1) {return "trop de formes !";}
-        else return res.get(0);
+        else  return res.get(0);
 
     }
 

@@ -39,7 +39,6 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <commun.show>package</commun.show>
                     <nohelp>true</nohelp>
                     <encoding>utf-8</encoding> <!-- éventuellement à changer : encodage de vos fichiers -->
                     <charset>utf-8</charset> <!-- éventuellement à changer : encodage de vos fichiers -->

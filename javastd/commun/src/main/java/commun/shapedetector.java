@@ -164,11 +164,15 @@ public class shapedetector {
 
 
             Image imageRes = sd.Mat2BufferedImage(matrix);
-
         }
-
-
-        return res;
+        if (res.size() > 1){
+            ArrayList<String> res2 = new ArrayList<>();
+            res2.add("more than one");
+            return res2;
+        }
+        else{
+            return res;
+        }
     }
 
 

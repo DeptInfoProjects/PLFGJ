@@ -1,10 +1,12 @@
 package commun;
 
 
-import java.util.List;
+import android.os.Bundle;
 
-
-
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 public class Controleur {
     Connexion connexion;
@@ -35,7 +37,16 @@ public class Controleur {
     }
 
     public void timeGameScor(Integer scor,Integer tentative) {
-        getAffichage().timeGameScor(scor,tentative); }
+        getAffichage().timeGameScor(scor,tentative);
+
+        /*
+        Bundle bundle = new Bundle();
+        bundle.putInt("scor", scor);
+        bundle.putInt("tentative", tentative);
+        getAffichage().majGraphic("timeGameScor", bundle);
+        */
+
+    }
 
     public void listTimeGame(String listFormeDem,String listFormeRec) {
         getAffichage().listTimeGame(listFormeDem,listFormeRec);
@@ -59,9 +70,33 @@ public class Controleur {
     public void timeDetectorValider(String image) {connexion.timeImage(image);}
 
 
-    public void endTimeGame() {connexion.endTimeGame(); }
+    public void endTimeGame() {connexion.endTimeGame();
+
+    }
     public  void listTimeGame2(){connexion.listResTimeGame();}
 
     public void rtoValider(String image) {connexion.rtoImage(image);}
     public void riddleValider(String image) {connexion.riddleImage(image);}
+
+
+
+    //pour recuperer l'adressIp
+    public String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface
+                    .getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf
+                        .getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+        }
+        return "";
+    }
+
 }

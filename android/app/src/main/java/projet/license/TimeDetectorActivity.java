@@ -57,7 +57,8 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
         mDessin = findViewById(R.id.dessin);
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
+
+        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
         connexion.seConnecter();
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override

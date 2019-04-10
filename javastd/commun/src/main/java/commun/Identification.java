@@ -6,6 +6,11 @@ public class Identification {
 
     public Identification() {}
 
+
+    public Identification(String nom){
+        setNom(nom);
+    }
+
     public Identification(String nom, int level) {
         this.nom = nom;
     }

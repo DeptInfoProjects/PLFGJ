@@ -70,12 +70,7 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
 
 
         ctrl = new Controleur((Affichage) this);
-        //fac
-        //Connexion connexion = new Connexion("http://10.1.124.22:10101",ctrl);
-        //spiti
-        //Connexion connexion = new Connexion("http://192.168.0.18:10101", ctrl);
-        //tilefono
-        Connexion connexion = new Connexion("http://172.20.10.2:10101",ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
         connexion.seConnecter();
 
 

@@ -8,16 +8,18 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 
 
-import commun.Identification;
-import commun.RtoDetector;
-import commun.shapedetector;
+import detector.RtoDetector;
+import detector.shapedetector;
 import org.opencv.core.Core;
 
 import java.io.*;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.List;
+import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -303,6 +305,23 @@ public class Serveur {
         // chargement de la lib
         System.load(testLib.getAbsolutePath());
     }
+    public static String getLocalIpAddress() {
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface
+                    .getNetworkInterfaces(); en.hasMoreElements();) {
+                NetworkInterface intf = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = intf
+                        .getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress()) {
+                        return inetAddress.getHostAddress().toString();
+                    }
+                }
+            }
+        } catch (SocketException ex) {
+        }
+        return "";
+    }
 
     public static final void main(String []args) throws IOException {
         try {
@@ -323,7 +342,7 @@ public class Serveur {
 
         Configuration config = new Configuration();
         config.setMaxFramePayloadLength(200000);
-        config.setHostname("172.20.10.2");
+        config.setHostname("192.168.0.100");
         config.setPort(10101);
 
 

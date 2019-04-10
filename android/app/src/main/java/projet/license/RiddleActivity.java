@@ -41,9 +41,7 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
 
 
         ctrl = new Controleur(this);
-        //tilefono
-        //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
         connexion.seConnecter();
 
 

@@ -33,10 +33,6 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
     private String formeDemande = "Press start";
     public PaintView myCanvas;
     final String[] formes = {"Point", "Segment", "Triangle", "Carre", "Rond"};
-    private RelativeLayout mRelativeLayout;
-    private Context mContext;
-    private int textCol;
-    private boolean debut = true;
 
 
 
@@ -48,9 +44,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
 
         ctrl = new Controleur(this);
-        //tilefono
-        //Connexion connexion = new Connexion("http://192.168.0.101:10101",ctrl);
-        Connexion connexion = new Connexion("http://172.20.10.2:10101", ctrl);
+        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -78,7 +72,6 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
 
 
-        mContext = getApplicationContext();
         myCanvas = findViewById(R.id.myCanvas);
 
         effacer.setOnClickListener(this);

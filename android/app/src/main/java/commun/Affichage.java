@@ -1,7 +1,5 @@
 package commun;
 
-import java.util.List;
-
 public interface Affichage {
 
     void majScor(boolean ok);
@@ -14,4 +12,6 @@ public interface Affichage {
 	
 	void riddleGame(boolean rep);
 
+
+	// void majGraphic(String message, Bundle parameters);
 }

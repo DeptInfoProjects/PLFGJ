@@ -1,24 +1,21 @@
 package projet.license;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
 
-import commun.Affichage;
-import commun.Connexion;
-import commun.Controleur;
+import gestion.Affichage;
+import gestion.Connexion;
+import gestion.Controleur;
 
 
 import static android.graphics.Color.MAGENTA;
@@ -44,7 +41,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -147,7 +144,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
                 myCanvas.clear();
                 break;
 
-                case R.id.pencolor:
+            case R.id.pencolor:
                 myCanvas.setBackgroundColor(Color.BLACK);
                 myCanvas.mPaint.setColor(getColor());
                 break;
@@ -161,65 +158,30 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
         Toast.makeText(this,"Dessiner les points de la forme demande\nps: Rond -> 5",Toast.LENGTH_LONG).show();
     }
 
-    public void timeGameScor(Integer score,Integer tentative){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-            }
-        });
-    }
+
 
     @Override
-    public void listTimeGame(String listDem, String listRec) {
+    public void majGraphic(String message, Bundle parameters) {
+        if(message.equals("majScor")) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (parameters.getBoolean("verif")) {
+                        String txt = ("Juste");
+                        score.setText(txt);
+                        score.setTextColor(Color.GREEN);
 
-    }
-
-
-    public void listTimeGame(List<Object> listFormeDem, List<Object> listFormeRec) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
-    }
-
-    @Override
-    public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
-
-    }
-	
-	@Override
-    public void riddleGame(boolean rep) {
-
-    }
-
-    public void majScor(final boolean b){
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (b){
-                    String txt = ("Juste");
-                    score.setText(txt);
-                    score.setTextColor(Color.GREEN);
-
+                    } else {
+                        String txt = ("Faux");
+                        score.setText(txt);
+                        score.setTextColor(Color.RED);
+                    }
                 }
-                else {
-                    String txt = ("Faux");
-                    score.setText(txt);
-                    score.setTextColor(Color.RED);
-
-
-
-                }
-            }
-        });
-
+            });
+        }
     }
-    public String FormeCourant(){
-        return this.formeDemande;
-    }
+
 }
 
 

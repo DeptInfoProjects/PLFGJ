@@ -1,34 +1,27 @@
 package projet.license;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.List;
 import java.util.Random;
 
-import commun.Affichage;
-import commun.Connexion;
-import commun.Controleur;
+import gestion.Affichage;
+import gestion.Connexion;
+import gestion.Controleur;
 
 public class RiddleActivity extends Activity implements View.OnClickListener, Affichage{
     private Button mButtonStart,mButtonValider ,mButtonClear;
     private TextView mTxtEnigme ,mTextRep;
     private PaintView myCanvas;
-    final String[] enigmes = {"Je suis un quadrilatère convexe à quatre côtés de même longueur avec quatre angles droits , je suis .. ?",
-            "Je suis est une figure plane, formée par trois points appelés sommets, par les trois segments qui les relient, , je suis .. ?",
-             "Je suis  une courbe plane fermée constituée des points situés à égale distance d'un point nommé centre , je suis .. ?"};
+    final String[] enigmes = {"Je suis un quadrilatÃ¨re convexe Ã  quatre cÃ´tÃ©s de mÃªme longueur avec quatre angles droits , je suis .. ?",
+            "Je suis est une figure plane, formÃ©e par trois points appelÃ©s sommets, par les trois segments qui les relient, , je suis .. ?",
+            "Je suis  une courbe plane fermÃ©e constituÃ©e des points situÃ©s Ã  Ã©gale distance d'un point nommÃ© centre , je suis .. ?"};
 
-    // enigmes[0] = Carré ;    enigmes[1] = Triangle ;   enigmes[2] = Cercle ;
+    // enigmes[0] = CarrÃ© ;    enigmes[1] = Triangle ;   enigmes[2] = Cercle ;
     final String[] reponsePoss = {"Carre","Triangle","Circle"};
     String reponse ;
     Controleur ctrl;
@@ -41,7 +34,7 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
 
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -100,42 +93,27 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
         }
     }
 
-    @Override
-    public void majScor(boolean ok) {
 
-    }
-
-    @Override
-    public void timeGameScor(Integer score, Integer tentative) {
-
-    }
-
-    @Override
-    public void listTimeGame(String listDem, String listRec) {
-
-    }
 
 
     @Override
-    public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
+    public void majGraphic(String message, Bundle parameters) {
+        if(message.equals("riddleRep")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (parameters.getBoolean("reponse")){
+                        mTextRep.setText("Bravo ! trouvÃ©");
+                        mTextRep.setTextColor(Color.GREEN);
+                    }
+                    else {
+                        mTextRep.setText("Faux ! c'Ã©tait un "+ reponse);
+                        mTextRep.setTextColor(Color.RED);
 
-    }
-
-    @Override
-    public void riddleGame(boolean rep) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (rep){
-                    mTextRep.setText("Bravo ! trouvé");
-                    mTextRep.setTextColor(Color.GREEN);
+                    }
                 }
-                else {
-                    mTextRep.setText("Faux ! c'était un "+ reponse);
-                    mTextRep.setTextColor(Color.RED);
+            });
+        }
 
-                }
-            }
-        });
     }
 }

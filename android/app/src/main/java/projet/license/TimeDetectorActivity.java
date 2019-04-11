@@ -1,22 +1,21 @@
 package projet.license;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import commun.Affichage;
-import commun.Connexion;
-import commun.Controleur;
+import gestion.Affichage;
+import gestion.Connexion;
+import gestion.Controleur;
 
 public class TimeDetectorActivity extends Activity implements View.OnClickListener, Affichage {
     private static final long START_TIME_IN_MILLIS = 30000;
@@ -58,7 +57,7 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
 
         ctrl = new Controleur(this);
 
-        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,49 +148,41 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
         mTextViewCountDown.setText(timeLeftFormatted);
     }
 
-    @Override
-    public void majScor(boolean ok) {
-
-    }
-    @Override
-    public void riddleGame(boolean rep) {
-
-    }
 
     @Override
-    public void timeGameScor(Integer score, Integer tentative) {
-        mTextViewCountDown.setText(score +"/" +tentative);
+    public void majGraphic(String message, Bundle parameters) {
+        if(message.equals("timeGameScor")){
+            mTextViewCountDown.setText(parameters.getInt("scor") + "/" + parameters.getInt("tentative"));
+
+        }
+        else if(message.equals("listTimeGame")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    listformeDem.add(parameters.getString("listFormeDem"));
+                    listformeRec.add(parameters.getString("listFormeRec"));
+                }
+            });
+
+        }
+
+
     }
 
 
-    public void listTimeGame( String listDem, String listRec) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                listformeDem.add(listDem);
-                listformeRec.add(listRec);
-            }
-        });
-
-    }
-
-    @Override
-    public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
-
-    }
 
     public void showToast(){
         String listDemande = "";
-        listDemande += "Demandé \n";
+        listDemande += "DemandÃ© \n";
         String listDessin = "";
-        listDessin += "| Dessiné \n";
+        listDessin += "| DessinÃ© \n";
         for(int i = 0; i < listformeDem.size();i++){
             listDemande += listformeDem.get(i) + "\n";
             listDessin += "| "+ list2forme.get(i) +"\n";}
 
         mDessin.setText(listDessin);
         mDemande.setText(listDemande);
-  }
+    }
 
 
     @Override

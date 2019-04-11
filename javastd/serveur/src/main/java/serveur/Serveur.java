@@ -147,7 +147,6 @@ public class Serveur {
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 byte[] imgbytes;
 
-                //System.out.println("s de talle : "+s.length());
                 imgbytes = Base64.getMimeDecoder().decode(s);
 
                 final File file = new File("shapes.png");
@@ -342,7 +341,7 @@ public class Serveur {
 
         Configuration config = new Configuration();
         config.setMaxFramePayloadLength(200000);
-        config.setHostname("192.168.0.100");
+        config.setHostname("172.20.10.11");
         config.setPort(10101);
 
 

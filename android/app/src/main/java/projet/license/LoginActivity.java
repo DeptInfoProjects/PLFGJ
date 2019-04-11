@@ -8,11 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.List;
-
-import commun.Affichage;
-import commun.Connexion;
-import commun.Controleur;
+import gestion.Affichage;
+import gestion.Connexion;
+import gestion.Controleur;
 
 public class LoginActivity extends Activity implements View.OnClickListener,Affichage {
     private EditText username ;
@@ -34,7 +32,7 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
         valider.setOnClickListener(this);
 
         ctrl = new Controleur(this);
-        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
 
     }
@@ -49,28 +47,9 @@ public class LoginActivity extends Activity implements View.OnClickListener,Affi
             startActivity(intent);
     }
 
-    @Override
-    public void majScor(boolean ok) {
-
-    }
 
     @Override
-    public void timeGameScor(Integer score, Integer tentative) {
-
-    }
-
-    @Override
-    public void listTimeGame(String listFormeDem, String listFormeRec) {
-
-    }
-
-    @Override
-    public void rtoGameScore(String coupJoueur, String coupServeur, String resultat) {
-
-    }
-	
-	@Override
-    public void riddleGame(boolean rep) {
+    public void majGraphic(String message, Bundle parameters) {
 
     }
 }

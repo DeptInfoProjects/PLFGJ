@@ -12,11 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
-import commun.Affichage;
-import commun.Connexion;
-import commun.Controleur;
+import gestion.Affichage;
+import gestion.Connexion;
+import gestion.Controleur;
 
 
 public class RtoDetectorActivity extends Activity implements  View.OnClickListener,Affichage{
@@ -70,7 +68,7 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
 
 
         ctrl = new Controleur((Affichage) this);
-        Connexion connexion = new Connexion("http://192.168.0.100:10101", ctrl);
+        Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
 
 
@@ -102,7 +100,7 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
 
         });
 
-}
+    }
 
 
     public void showHelp(){
@@ -112,70 +110,62 @@ public class RtoDetectorActivity extends Activity implements  View.OnClickListen
 
 
     @Override
-    public void majScor(boolean ok) {
+    public void majGraphic(String message, Bundle parameters) {
+
+        if (message.equals("resultatRto")){
+            String coupJoueur = parameters.getString("coupJoueur");
+            String coupServeur = parameters.getString("coupServeur");
+            String resultat = parameters.getString("resultat");
+            runOnUiThread(new Runnable() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void run() {
+
+                    String coupSv = coupServeur;
+                    mTxtcoupJoueur.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+
+                    if (resultat.equals("Joueur")){
+                        scoreJr ++;
+                        mTxtcoupJoueur.setBackgroundColor(Color.GREEN);
+                        mTxtcoupAdversaire.setBackgroundColor(Color.RED);
+                    }
+                    else if (resultat.equals("Serveur")){
+                        scoreSv ++;
+                        mTxtcoupJoueur.setBackgroundColor(Color.RED);
+                        mTxtcoupAdversaire.setBackgroundColor(Color.GREEN);
+                    }
+                    else if (resultat.equals("Egalite")){
+                        mTxtcoupJoueur.setBackgroundColor(Color.GRAY);
+                        mTxtcoupAdversaire.setBackgroundColor(Color.GRAY);
+                    }
+
+                    else {
+                        mTxtcoupJoueur.setBackgroundColor(Color.BLUE);
+                        mTxtcoupJoueur.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
+                        coupSv = "";
+                        mTxtcoupAdversaire.setBackgroundColor(Color.TRANSPARENT);
+                    }
+
+                    mTxtcoupJoueur.setText(coupJoueur);
+                    mTxtscoreJoueur.setText("" + scoreJr);
+
+                    mTxtcoupAdversaire.setText(coupSv);
+                    mTxtscoreAdversaire.setText("" + scoreSv);
+
+                }
+
+
+            });
+        }
 
     }
 
-    @Override
-    public void riddleGame(boolean rep) {
-
-    }
-
-
-
-    public void rtoGameScore(final String coupJoueur, final String coupServeur, final String resultat) {
-        runOnUiThread(new Runnable() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void run() {
-
-                String coupSv = coupServeur;
-                mTxtcoupJoueur.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-
-                if (resultat.equals("Joueur")){
-                    scoreJr ++;
-                    mTxtcoupJoueur.setBackgroundColor(Color.GREEN);
-                    mTxtcoupAdversaire.setBackgroundColor(Color.RED);
-                }
-                else if (resultat.equals("Serveur")){
-                    scoreSv ++;
-                    mTxtcoupJoueur.setBackgroundColor(Color.RED);
-                    mTxtcoupAdversaire.setBackgroundColor(Color.GREEN);
-                }
-                else if (resultat.equals("Egalite")){
-                    mTxtcoupJoueur.setBackgroundColor(Color.GRAY);
-                    mTxtcoupAdversaire.setBackgroundColor(Color.GRAY);
-                }
-
-                else {
-                    mTxtcoupJoueur.setBackgroundColor(Color.BLUE);
-                    mTxtcoupJoueur.setTextSize(TypedValue.COMPLEX_UNIT_SP,15);
-                    coupSv = "";
-                    mTxtcoupAdversaire.setBackgroundColor(Color.TRANSPARENT);
-                }
-
-                mTxtcoupJoueur.setText(coupJoueur);
-                mTxtscoreJoueur.setText("" + scoreJr);
-
-                mTxtcoupAdversaire.setText(coupSv);
-                mTxtscoreAdversaire.setText("" + scoreSv);
-
-            }
-
-        });
-    }
 
 
     @Override
     public void onClick(View v) { }
 
-    @Override
-    public void timeGameScor(Integer score, Integer tentative){}
 
-    @Override
-    public void listTimeGame(String listDem, String listRec) {
-
-    }
 
 
 }

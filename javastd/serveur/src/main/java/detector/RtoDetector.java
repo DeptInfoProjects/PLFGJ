@@ -111,8 +111,13 @@ public class RtoDetector {
         }
 
 
-        if (res.size() > 1) {return "trop de formes !";}
-        else  return res.get(0);
+        if (res.size() > 1) {
+            return "trop de formes !";}
+
+        else if(res.size() == 0){
+            return "aucune forme !";
+        }
+        return res.get(0);
 
     }
 

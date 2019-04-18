@@ -165,9 +165,15 @@ public class shapedetector {
 
             Image imageRes = sd.Mat2BufferedImage(matrix);
         }
+
+        ArrayList<String> res2 = new ArrayList<>();
         if (res.size() > 1){
-            ArrayList<String> res2 = new ArrayList<>();
+
             res2.add("more than one");
+            return res2;
+        }
+        else if(res.size() == 0){
+            res2.add("aucune forme");
             return res2;
         }
         else{
@@ -190,7 +196,6 @@ public class shapedetector {
         approxImg2f.convertTo(approxImg, CvType.CV_32S);
 
         return approxImg;
-
     }
 
 

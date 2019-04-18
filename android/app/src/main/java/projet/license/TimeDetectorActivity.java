@@ -84,6 +84,7 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
                 listformeRec = new ArrayList<>();
                 mDemande.setVisibility(View.INVISIBLE);
                 mDessin.setVisibility(View.INVISIBLE);
+                list2forme =  new ArrayList<>();
             }
         });
         mButtonValider.setOnClickListener(new View.OnClickListener() {
@@ -173,12 +174,12 @@ public class TimeDetectorActivity extends Activity implements View.OnClickListen
 
     public void showToast(){
         String listDemande = "";
-        listDemande += "DemandÃ© \n";
+        listDemande += "DEMANDER \n";
         String listDessin = "";
-        listDessin += "| DessinÃ© \n";
+        listDessin += "|| DESSINER \n";
         for(int i = 0; i < listformeDem.size();i++){
             listDemande += listformeDem.get(i) + "\n";
-            listDessin += "| "+ list2forme.get(i) +"\n";}
+            listDessin  += "|| "+ list2forme.get(i) +"\n";}
 
         mDessin.setText(listDessin);
         mDemande.setText(listDemande);

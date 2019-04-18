@@ -89,8 +89,8 @@
 
     <projet.license.PaintView
         android:id="@+id/myCanvas2"
-        android:layout_width="310dp"
-        android:layout_height="319dp"
+        android:layout_width="wrap_content"
+        android:layout_height="280dp"
         android:layout_below="@+id/enigme"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -100,13 +100,31 @@
 
     <TextView
         android:id="@+id/rep"
-        android:layout_width="305dp"
-        android:layout_height="74dp"
+        android:layout_width="394dp"
+        android:layout_height="58dp"
         android:layout_below="@+id/myCanvas2"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="0dp"
+        android:textAlignment="center"
         android:textColor="@color/colorAccent"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/propo"
+        android:layout_width="361dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rep"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="26dp"
+        android:background="@drawable/buttonshapecolor"
+        android:text="UNE ENIGME A PROPOSER ?"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
 </RelativeLayout>

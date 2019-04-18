@@ -11,18 +11,15 @@ import com.corundumstudio.socketio.listener.DataListener;
 import detector.RtoDetector;
 import detector.shapedetector;
 import org.opencv.core.Core;
+import utile.Enigme;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 
 
 public class Serveur {
@@ -32,6 +29,11 @@ public class Serveur {
     private ArrayList<String> time_detector_demander = new ArrayList<>();
     private ArrayList<String> time_detector_dessiner = new ArrayList<>();
     private Integer compter = 0;
+    private int scorDraw,scorRto,scorTime,scorRiddle = 0;
+    private int tentDraw,tentRto,tentTime,tentRiddle = 0;
+    private Integer compterEnigme = 3;
+    private Integer compter2 = 0;
+
 
     public Serveur() { } // utilisation pour les tests
 
@@ -46,6 +48,7 @@ public class Serveur {
                 System.out.println("connexion de " + socketIOClient.getRemoteAddress());
             }
         });
+
 
 
 // *********************************************************************************************************************
@@ -71,21 +74,23 @@ public class Serveur {
                     System.out.println("Forme demandée   : " + list[0]);
                     System.out.println("Points donnés    : " + list[1]);
                     System.out.println("serveur.Serveur :  Forme valide , le client passe a la prochaine ");
+                    scorDraw ++;
+                    tentDraw ++;
                     formeValide(socketIOClient, verif);
 
                 } else {
                     System.out.println("---------------------------------------------------------------");
                     System.out.println("Forme demandée   : " + list[0]);
                     System.out.println("Points donnés    : " + list[1]);
-                    System.out.println("serveur.Serveur :  Forme pas valide , le client passe a la prochaine ");
+                    System.out.println("Retour au Client :  Forme pas valide , le client passe a la prochaine ");
+                    tentDraw ++;
                     formeValide(socketIOClient, verif);
                 }
 
             }
         });
-		
-		
-		        serveur.addEventListener("riddleImage", String.class, new DataListener<String>() {
+
+        serveur.addEventListener("riddleImage", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 String[] list = s.split(",");
@@ -105,13 +110,56 @@ public class Serveur {
                 System.out.println("Réponse reçue :" + imageRec);
                 System.out.println("Réponse attendue :" + list[0]);
 
+                if(list[0].equals(imageRec)){
+                    scorRiddle ++;
+                }
+                tentRiddle++;
+
                 riddleGame(socketIOClient,list[0].equals(imageRec));
 
 
 
             }
         });
-		
+		serveur.addEventListener("getNewEnigme", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+
+                BufferedReader fileReader = null;
+                try {
+                    List<Enigme> enigmes = new ArrayList();
+                    String line = "";
+                    fileReader = new BufferedReader(new FileReader("enigmes.csv"));
+                    while ((line = fileReader.readLine()) != null) {
+                        String[] tokens = line.split(";");
+                        if (tokens.length > 0) {
+                            Enigme enigme = new Enigme(tokens[0], tokens[1]);
+                            enigmes.add(enigme);
+                            if (compter2 <= compterEnigme) {
+                                returnEnigmes(socketIOClient, enigmes.get(compter2).getEnigme(), enigmes.get(compter2).getReponse());
+                                compter2++;
+                            } else {
+                                compter2 = 0;
+                            }
+                        }
+                    }
+                }catch (Exception e) {
+                    System.out.println("Error in CsvFileReader !!!");
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fileReader.close();
+                    } catch (IOException e) {
+                        System.out.println("Error while closing fileReader !!!");
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+
+
+        });
 		
         serveur.addEventListener("timeImage", String.class, new DataListener<String>() {
             @Override
@@ -133,12 +181,20 @@ public class Serveur {
                 time_detector_dessiner.add(sd.detectShapes("shapes.png").get(0));
                 compter ++;
 
+
+
+
                 String res = list[0];
                 res  += ",";
                 res  += res + sd.detectShapes("shapes.png").get(0);
                 System.out.println(compter + " : Forme Demande : " + time_detector_demander);
                 System.out.println("  : Forme Dessine : " + time_detector_dessiner);
                 listTimeGame(socketIOClient,res);
+
+                if (time_detector_demander.get(time_detector_demander.size() -1).equals(time_detector_dessiner.get(time_detector_dessiner.size() -1))){
+                    scorTime ++;
+                }
+                tentTime ++;
             }
         });
 
@@ -146,6 +202,7 @@ public class Serveur {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
                 byte[] imgbytes;
+
 
                 imgbytes = Base64.getMimeDecoder().decode(s);
 
@@ -169,15 +226,67 @@ public class Serveur {
 
                 System.out.println("---------------------------------------------------------------");
 
-
-
+                if(reponse.get(2).equals("Joueur")){
+                    scorRto ++;
+                    tentRto ++;
+                }
+                else if(reponse.get(2).equals("Serveur")){
+                    tentRto ++;
+                }
                 resultatRto(socketIOClient, reponse.get(0), reponse.get(1), reponse.get(2));
+
+            }
+        });
+
+        serveur.addEventListener("enigme", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                String[] allenigme = s.split(";");
+                Enigme propo = new Enigme(allenigme[0],allenigme[1]);
+                FileWriter fileWriter = null;
+                try {
+                    fileWriter = new FileWriter("enigmes.csv",true);
+                    fileWriter.append(propo.getLineSeparateur());
+                    fileWriter.append(propo.getEnigme());
+                    fileWriter.append(propo.getSeparateur());
+                    fileWriter.append(propo.getReponse());
+
+                    System.out.println("Enigme ajouter");
+                    System.out.println("Enigme  : " + propo.getEnigme());
+                    System.out.println("Reponse : " + propo.getReponse());
+                    compterEnigme++;
+
+
+                } catch (Exception e){
+                    System.out.println("Error with CsvFileWriter");
+                    e.printStackTrace();
+                }finally {
+                    try{
+                        fileWriter.flush();
+                        fileWriter.close();
+                    }catch (IOException e){
+                        System.out.println("Error while flushing/closing fileWriter");
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+
+
+
+        serveur.addEventListener("getStat", String.class, new DataListener<String>() {
+            @Override
+            public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
+                returnStat(socketIOClient,scorDraw,tentDraw,scorRto,tentRto,scorRiddle,tentRiddle,scorTime,tentTime);
 
             }
         });
 
 
     }
+
 
 
 
@@ -224,6 +333,7 @@ public class Serveur {
 
 
 
+
 // *********************************************************************************************************************
 //PARTIE COMMUNICATION SERVEUR VERS CLIENT
 // *********************************************************************************************************************
@@ -231,17 +341,25 @@ public class Serveur {
     private void formeValide(SocketIOClient socketIOClient, boolean verif) {
         socketIOClient.sendEvent("forme_valide", verif);
     }
-    private  void listTimeGame(SocketIOClient socketIOClient,String res){
+    private void listTimeGame(SocketIOClient socketIOClient,String res){
         socketIOClient.sendEvent("listResTimeGame", res );
     }
-
-    private  void resultatRto(SocketIOClient socketIOClient, String cpJr, String cpSv, String res){
+    private void resultatRto(SocketIOClient socketIOClient, String cpJr, String cpSv, String res){
         socketIOClient.sendEvent("resultatRto", cpJr, cpSv, res);
     }
-
     private void riddleGame(SocketIOClient socketIOClient,boolean rep){
         socketIOClient.sendEvent("riddleGameRes",rep);
+
     }
+    private void returnStat(SocketIOClient socketIOClient, int scor1, int tent1, int scor2, int tent2, int scor3, int tent3, int scor4, int tent4) {
+        socketIOClient.sendEvent("statReponse",scor1,tent1,scor2,tent2,scor3,tent3,scor4,tent4);
+    }
+
+    private void returnEnigmes(SocketIOClient socketIOClient,String enigme,String reponse){
+        socketIOClient.sendEvent("enigmeReponse",enigme,reponse);
+    }
+
+
 
 
 
@@ -304,24 +422,6 @@ public class Serveur {
         // chargement de la lib
         System.load(testLib.getAbsolutePath());
     }
-    public static String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface
-                    .getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf
-                        .getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress().toString();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-        }
-        return "";
-    }
-
     public static final void main(String []args) throws IOException {
         try {
             System.setOut(new PrintStream(System.out, true, "UTF-8"));
@@ -334,7 +434,6 @@ public class Serveur {
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
-
 
 
 
@@ -352,5 +451,10 @@ public class Serveur {
         System.out.println("fin du main");
 
     }
+
+
+
+
+
 
 }

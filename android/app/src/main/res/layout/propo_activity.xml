@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sample3">
+
+    <TextView
+        android:id="@+id/titre"
+        android:layout_width="246dp"
+        android:layout_height="65dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="23dp"
+        android:text="PROPOSITIONS"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="173dp"
+        android:layout_height="88dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-19dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/titre"
+        android:src="@drawable/logo" />
+
+    <EditText
+        android:id="@+id/question"
+        android:layout_width="352dp"
+        android:layout_height="99dp"
+        android:layout_below="@+id/titre"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="95dp"
+        android:ems="10"
+        android:hint="Proposez une énigme"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/reponse"
+        android:layout_width="342dp"
+        android:layout_height="105dp"
+        android:layout_below="@+id/question"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="42dp"
+        android:textAlignment="center"
+
+        android:background="@drawable/buttonshapecolor"
+        android:entries="@array/choix" />
+
+    <Button
+        android:background="@drawable/buttonshapecolor"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reponse"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="39dp"
+        android:text="SUBMIT"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+</RelativeLayout>

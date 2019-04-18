@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class HomeActivity extends Activity implements  View.OnClickListener {
-    private Button draw_detector,rto_detector,time_detector,riddle,training;
+    private Button draw_detector,rto_detector,time_detector,riddle,training,statistiques;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,9 @@ public class HomeActivity extends Activity implements  View.OnClickListener {
 
         riddle = findViewById(R.id.Riddle);
         riddle.setOnClickListener(this);
+
+        statistiques = findViewById(R.id.stat);
+        statistiques.setOnClickListener(this);
 
     }
 
@@ -50,6 +53,8 @@ public class HomeActivity extends Activity implements  View.OnClickListener {
             case R.id.RtoDetector:
                 intent = new Intent(this,RtoDetectorActivity.class);
                 break;
+            case R.id.stat:
+                intent = new Intent(this,StatisticsActivity.class);
         }
         if (intent != null)
             startActivity(intent);

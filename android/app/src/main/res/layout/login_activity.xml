@@ -22,7 +22,7 @@
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="17dp"
         android:text="Choose your Nickname :"
         android:textAlignment="center"
         android:textColor="@android:color/white"
@@ -41,7 +41,7 @@
         android:hint="Username"
         android:inputType="textPersonName"
         android:textAlignment="viewStart"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/darker_gray"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -52,13 +52,13 @@
         android:layout_below="@+id/loginName"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="91dp"
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="196dp"
+        android:layout_marginEnd="111dp"
         android:background="@drawable/buttonshapecolor"
         android:text="confirm"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorAccent"
         android:textStyle="bold" />
 
     <TextView
@@ -67,10 +67,10 @@
         android:layout_height="62dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="34dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorAccent"
         android:textSize="24sp"
         android:textStyle="bold" />
 </RelativeLayout>

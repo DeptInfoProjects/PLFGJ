@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
     private Button effacer, couleur, start, tutoriel,valider;
     private TextView  fdem, score;
     Controleur ctrl;
+    private RelativeLayout mRelativeLayout;
+
     public int i = 0;
     private String formeDemande = "Press start";
     public PaintView myCanvas;
@@ -42,6 +45,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
         ctrl = new Controleur(this);
         Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
+
         connexion.seConnecter();
 
 
@@ -65,6 +69,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
         tutoriel = findViewById(R.id.help);
         score = findViewById(R.id.ticks);
 
+        mRelativeLayout = findViewById(R.id.container);
 
 
 
@@ -155,7 +160,7 @@ public  class DrawDetectorActivity extends Activity implements View.OnClickListe
 
 
     public void showToast(View v){
-        Toast.makeText(this,"Dessiner les points de la forme demande\nps: Rond -> 5",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Dessiner le nombre de points necessaire que l'on doit relier pour dessiner la forme \nps: Rond -> 5 points",Toast.LENGTH_LONG).show();
     }
 
 

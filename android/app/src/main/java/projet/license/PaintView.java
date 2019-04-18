@@ -90,8 +90,8 @@ public class PaintView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 touch_start(x, y);
-                this.addTick();
                 invalidate();
+                this.addTick();
                 break;
             case MotionEvent.ACTION_MOVE:
                 touch_move(x, y);
@@ -104,6 +104,7 @@ public class PaintView extends View {
                 invalidate();
                 break;
         }
+
         return true;
     }
 

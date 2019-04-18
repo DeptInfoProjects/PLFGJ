@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Detector</string>
+
+    <string-array name="choix">
+        <item>Circle</item>
+        <item>Triangle</item>
+        <item>Carre</item>
+    </string-array>
+
+
+
+
 </resources>

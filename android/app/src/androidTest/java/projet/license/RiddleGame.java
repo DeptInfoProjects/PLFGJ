@@ -61,6 +61,7 @@ public class RiddleGame {
                                 2),
                         isDisplayed()));
         button3.perform(click());
+
     }
 
     private static Matcher<View> childAtPosition(

@@ -1,12 +1,23 @@
 package projet.license;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import gestion.Affichage;
@@ -14,15 +25,14 @@ import gestion.Connexion;
 import gestion.Controleur;
 
 public class RiddleActivity extends Activity implements View.OnClickListener, Affichage{
-    private Button mButtonStart,mButtonValider ,mButtonClear;
+    private Button mButtonStart,mButtonValider ,mButtonClear , mPropo;
     private TextView mTxtEnigme ,mTextRep;
     private PaintView myCanvas;
-    final String[] enigmes = {"Je suis un quadrilatÃ¨re convexe Ã  quatre cÃ´tÃ©s de mÃªme longueur avec quatre angles droits , je suis .. ?",
-            "Je suis est une figure plane, formÃ©e par trois points appelÃ©s sommets, par les trois segments qui les relient, , je suis .. ?",
-            "Je suis  une courbe plane fermÃ©e constituÃ©e des points situÃ©s Ã  Ã©gale distance d'un point nommÃ© centre , je suis .. ?"};
+    public ArrayList<String> enigmes = new ArrayList<>();
+    public ArrayList<String> reponsePoss = new ArrayList<>();
+    public int numEnigme = 4;
 
-    // enigmes[0] = CarrÃ© ;    enigmes[1] = Triangle ;   enigmes[2] = Cercle ;
-    final String[] reponsePoss = {"Carre","Triangle","Circle"};
+    // enigmes[0] = Carré ;    enigmes[1] = Triangle ;   enigmes[2] = Cercle ;
     String reponse ;
     Controleur ctrl;
 
@@ -37,12 +47,14 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
         Connexion connexion = new Connexion("http://172.20.10.11:10101", ctrl);
         connexion.seConnecter();
 
+        ctrl.getListEnigme();
+
+
 
         mButtonStart.setOnClickListener(this);
         mButtonValider.setOnClickListener(this);
         mButtonClear.setOnClickListener(this);
-
-
+        mPropo.setOnClickListener(this);
     }
     private void init() {
         mButtonStart = findViewById(R.id.start);
@@ -51,26 +63,19 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
         mButtonValider = findViewById(R.id.valider);
         mButtonClear = findViewById(R.id.clear);
         myCanvas = findViewById(R.id.myCanvas2);
+        mPropo = findViewById(R.id.propo);
 
 
     }
 
-    public void newRiddle(){
-        Random rand = new Random();
-        int rando = rand.nextInt(3);
-        String riddleRandom = enigmes[rando];
-        mTxtEnigme.setText(riddleRandom);
-        reponse = reponsePoss[rando];
 
-
-    }
 
     @Override
     public void onClick(View v) {
         Button press = (Button) findViewById(v.getId());
         switch (v.getId()) {
             case R.id.start:
-                newRiddle();
+                ctrl.getNewEnigme();
                 mButtonStart.setVisibility(View.INVISIBLE);
                 mButtonValider.setVisibility(View.VISIBLE);
                 mButtonClear.setVisibility(View.VISIBLE);
@@ -79,7 +84,7 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
 
             case R.id.valider:
                 ctrl.riddleValider(reponse + ',' + myCanvas.encodeBitMap() );
-                newRiddle();
+                ctrl.getNewEnigme();
                 myCanvas.clear();
                 break;
 
@@ -87,9 +92,10 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
                 myCanvas.clear();
                 break;
 
-
-
-
+            case R.id.propo:
+                Intent intent = new Intent(this,PropositionActivity.class);
+                if (intent != null)
+                    startActivity(intent);
         }
     }
 
@@ -98,16 +104,25 @@ public class RiddleActivity extends Activity implements View.OnClickListener, Af
 
     @Override
     public void majGraphic(String message, Bundle parameters) {
+        if(message.equals("enigmeRec")){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                        mTxtEnigme.setText(parameters.getString("enigme"));
+                        reponse = parameters.getString("reponse");
+                }
+            });
+        }
         if(message.equals("riddleRep")){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (parameters.getBoolean("reponse")){
-                        mTextRep.setText("Bravo ! trouvÃ©");
+                        mTextRep.setText("Bravo ! trouve");
                         mTextRep.setTextColor(Color.GREEN);
                     }
                     else {
-                        mTextRep.setText("Faux ! c'Ã©tait un "+ reponse);
+                        mTextRep.setText("Faux ! c'etait un "+ reponse);
                         mTextRep.setTextColor(Color.RED);
 
                     }

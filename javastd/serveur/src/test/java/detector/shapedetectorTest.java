@@ -49,7 +49,8 @@ public class shapedetectorTest {
             fileOut.close();
 
             shapedetector sd = new shapedetector();
-            String reponse = sd.detectShapes("test.png").get(0);
+            String reponse = sd.detectShapes("timeDetector", "test.png");
+
             assertEquals("Expected      | Donner    ", resultatAttendue.get(compter), reponse);
             compter +=1;
         }

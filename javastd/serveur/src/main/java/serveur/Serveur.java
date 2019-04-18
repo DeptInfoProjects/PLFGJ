@@ -8,7 +8,6 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 
 
-import detector.RtoDetector;
 import detector.shapedetector;
 import org.opencv.core.Core;
 import utile.Enigme;
@@ -63,6 +62,7 @@ public class Serveur {
                 player = s;
             }
         });
+
         serveur.addEventListener("nbpoints", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String coup, AckRequest ackRequest) throws Exception {
@@ -104,8 +104,8 @@ public class Serveur {
                 fileOut.flush();
                 fileOut.close();
 
-                RtoDetector rt = new RtoDetector() ;
-                String imageRec = rt.detectRtoS("shapes.png");
+                shapedetector rt = new shapedetector() ;
+                String imageRec = rt.detectShapes("riddleGame", "shapes.png");
 
                 System.out.println("Réponse reçue :" + imageRec);
                 System.out.println("Réponse attendue :" + list[0]);
@@ -121,10 +121,10 @@ public class Serveur {
 
             }
         });
+
 		serveur.addEventListener("getNewEnigme", String.class, new DataListener<String>() {
             @Override
             public void onData(SocketIOClient socketIOClient, String s, AckRequest ackRequest) throws Exception {
-
                 BufferedReader fileReader = null;
                 try {
                     List<Enigme> enigmes = new ArrayList();
@@ -134,14 +134,13 @@ public class Serveur {
                         String[] tokens = line.split(";");
                         if (tokens.length > 0) {
                             Enigme enigme = new Enigme(tokens[0], tokens[1]);
-                            enigmes.add(enigme);
-                            if (compter2 <= compterEnigme) {
-                                returnEnigmes(socketIOClient, enigmes.get(compter2).getEnigme(), enigmes.get(compter2).getReponse());
-                                compter2++;
-                            } else {
-                                compter2 = 0;
-                            }
-                        }
+                            enigmes.add(enigme);}
+                    }
+
+                    returnEnigmes(socketIOClient, enigmes.get(compter2).getEnigme(), enigmes.get(compter2).getReponse());
+                    compter2 ++;
+                    if(compter2 == enigmes.size()){
+                        compter2 = 0;
                     }
                 }catch (Exception e) {
                     System.out.println("Error in CsvFileReader !!!");
@@ -178,7 +177,7 @@ public class Serveur {
 
                 shapedetector sd = new shapedetector();
                 time_detector_demander.add(list[0]);
-                time_detector_dessiner.add(sd.detectShapes("shapes.png").get(0));
+                time_detector_dessiner.add(sd.detectShapes("timeDetector", "shapes.png"));
                 compter ++;
 
 
@@ -186,7 +185,7 @@ public class Serveur {
 
                 String res = list[0];
                 res  += ",";
-                res  += res + sd.detectShapes("shapes.png").get(0);
+                res  += res + sd.detectShapes("timeDetector","shapes.png");
                 System.out.println(compter + " : Forme Demande : " + time_detector_demander);
                 System.out.println("  : Forme Dessine : " + time_detector_dessiner);
                 listTimeGame(socketIOClient,res);
@@ -215,14 +214,14 @@ public class Serveur {
                 ArrayList<String> reponse;
 
 
-                RtoDetector coupRto = new RtoDetector();
-                reponse = coupRto.reponseServeur("shapes.png");
+                shapedetector coupRto = new shapedetector();
+                reponse = coupRto.reponseServeurRto("shapes.png");
 
 
                 System.out.println("---------------------------------------------------------------");
                 System.out.println("RTO \nLe client a joué " + reponse.get(0));
                 System.out.println("Le serveur a joué " + reponse.get(1));
-                System.out.println("gagnant : " + reponse.get(2));
+                System.out.println("resultat : " + reponse.get(2));
 
                 System.out.println("---------------------------------------------------------------");
 
@@ -272,9 +271,6 @@ public class Serveur {
 
             }
         });
-
-
-
 
         serveur.addEventListener("getStat", String.class, new DataListener<String>() {
             @Override
@@ -354,7 +350,6 @@ public class Serveur {
     private void returnStat(SocketIOClient socketIOClient, int scor1, int tent1, int scor2, int tent2, int scor3, int tent3, int scor4, int tent4) {
         socketIOClient.sendEvent("statReponse",scor1,tent1,scor2,tent2,scor3,tent3,scor4,tent4);
     }
-
     private void returnEnigmes(SocketIOClient socketIOClient,String enigme,String reponse){
         socketIOClient.sendEvent("enigmeReponse",enigme,reponse);
     }
